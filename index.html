@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uzair Ali - Personal Site</title>
+
+    <link rel="stylesheet" href="Styles/Main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+    <canvas id="Canvas3D"></canvas>
+
+    <div class="content-wrapper">
+        <div id="MainDiv">
+            <div id="grid-cursor"></div>  
+
+            <header>
+                <a href="#home" class="logo" aria-label="Homepage Link">
+                    Uzair <span class="cyan-glow">Ali</span>
+                </a>
+
+                <!-- Hamburger Button -->
+                <button class="hamburger" id="hamburger" aria-label="Toggle Menu" aria-expanded="false">
+                    &#9776;
+                </button>
+
+                <!-- Navigation Menu -->
+                <nav id="nav-menu" aria-label="Primary navigation">
+                    <a href="#home" class="active" tabindex="0">Home</a>
+                    <a href="#education" tabindex="0">Education</a>
+                    <a href="#services" tabindex="0">Services</a>
+                    <a href="#testimonials" tabindex="0">Testimonials</a>
+                    <a href="#experience" tabindex="0">Experience</a>
+                    <a href="#projects" tabindex="0">Projects</a>
+                    <a href="#contact" tabindex="0">Contact</a>
+                </nav>
+            </header>
+
+            <!-- Home Section -->
+            <section id="home" aria-label="Home introduction">
+                <div id="home-content" tabindex="0">
+                    <h1>
+                        Hi, It's <span class="cyan-glow">Uzair!</span>
+                    </h1>
+                    <h2>I'm a <span class="cyan-glow" id="dynamic-profession"></span></h2>
+                    <p>
+                        Passionate about creating intuitive and impactful digital experiences, I specialize in crafting
+                        user-friendly interfaces and robust web solutions. Let's collaborate to bring your ideas to life!
+                    </p>
+                    <div class="social-icons" aria-label="Social media links">
+                        <a href="https://linkedin.com/in/muhammad-uzair-ali-32aa63372" target="_blank">
+                            <img src="assets/linkedin.png" alt="LinkedIn" class="icon-img" />
+                        </a>
+                        <a href="https://github.com/uzairali12" target="_blank">
+                            <img src="assets/github.png" alt="GitHub" class="icon-img" />
+                        </a>
+                        <a href="https://instagram.com/its_uzair.xyz" target="_blank">
+                            <img src="assets/instagram.svg" alt="Instagram" class="icon-img" />
+                        </a>
+                        <a href="https://api.whatsapp.com/send/?phone=923282626204&text=Hello+%21+Uzair%2C+Lets+Solve+My+problem+By+helping+each+other+&type=phone_number&app_absent=0"
+                            target="_blank">
+                            <img src="assets/whatsapp.svg" alt="whatsapp" class="icon-img" />
+                        </a>
+                    </div>
+
+                    <div id="home-buttons">
+                        <button id="hire-btn" class="btn cyan-glow-bg" tabindex="0" aria-label="Hire Uzair">Hire Me</button>
+                        <!-- Opens PDF directly in a new tab -->
+    <a href="Uzair_Ali_Resume.pdf" 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       class="btn outline" 
+       tabindex="0" 
+       aria-label="View Uzair's Resume">
+       Resume
+    </a>
+                    </div>
+                </div>
+                <div id="home-image" tabindex="0" aria-label="Profile picture of Uzair">
+                    <img src="assets/img/img 4.jpg" alt="Profile picture of Uzair Ali" />
+                </div>
+            </section>
+
+            <!-- Education -->
+            <section id="education" tabindex="0" aria-label="Education timeline section">
+                <h2>Education</h2>
+                <div class="timeline" role="list" aria-live="polite">
+                    <article class="timeline-item left">
+                        <h3>Matriculation</h3>
+                        <p>Completed with 96% from Al-Hamra School & College, Karachi.</p>
+                    </article>
+                    <article class="timeline-item right">
+                        <h3>Intermediate (FSc)</h3>
+                        <p>Secured 82% from Bahria College EAB-1 Majeed Campus , Karachi Board.</p>
+                    </article>
+                    <article class="timeline-item left">
+                        <h3>Bachelor of Science in Computer Science</h3>
+                        <p>Currently pursuing at Iqra Universty Airport Campus, specialized in frontend, backend, and cloud
+                            technologies.</p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Services -->
+            <section id="services" tabindex="0" aria-label="Services offered">
+                <h2>Services</h2>
+                <div class="services-grid">
+                    <article class="service-card" tabindex="0" aria-label="UI Design service">
+                        <h3>UI Design</h3>
+                        <p>Creating visually appealing and user-friendly interfaces for web and mobile applications.</p>
+                    </article>
+                    <article class="service-card" tabindex="0" aria-label="Frontend Development service">
+                        <h3>Frontend Development</h3>
+                        <p>Building responsive and interactive web applications using modern frameworks.</p>
+                    </article>
+                    <article class="service-card" tabindex="0" aria-label="Backend Development service">
+                        <h3>Backend Development</h3>
+                        <p>Developing robust server-side solutions for seamless data management and performance.</p>
+                    </article>
+                    <article class="service-card" tabindex="0" aria-label="Testing service">
+                        <h3>Testing</h3>
+                        <p>Ensuring quality and reliability through comprehensive testing and debugging.</p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Experience -->
+            <section id="experience" tabindex="0" aria-label="Work Experience">
+                <h2>Experience</h2>
+                <div class="experience-grid">
+                    <article class="experience-card">
+                        <h3>Web Developer (Freelance)</h3>
+                        <p>Designed and developed responsive websites for clients using HTML, CSS, JavaScript, and React.</p>
+                        <span>2022 - Present</span>
+                    </article>
+                    <article class="experience-card">
+                        <h3>Graphic Designer</h3>
+                        <p>Created visual assets, social media posts, and branding for clients using Adobe Photoshop and Illustrator.</p>
+                        <span>2021 - Present</span>
+                    </article>
+                    <article class="experience-card">
+                        <h3>Software Development Intern</h3>
+                        <p>Worked on agile-based full-stack projects, building CRUD systems with Node.js and MongoDB.</p>
+                        <span>Summer 2023</span>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Projects -->
+            <section id="projects" tabindex="0" aria-label="Highlighted Projects">
+                <h2 class="section-title">Featured <span class="highlight">Projects</span></h2>
+                <div class="project-showcase">
+                    <!-- Project 1 -->
+                    <div class="project-card">
+                        <div class="project-img">
+                            <img src="assets/project1.jpg" alt="Savvy Idea Site">
+                        </div>
+                        <div class="project-details">
+                            <h3>Savvy Idea</h3>
+                            <p>Wedding planner website built using Next.js, TailwindCSS, and HTML. Responsive and fast-loading.</p>
+                            <div class="tags">
+                                <span>Next.js</span><span>Tailwind</span><span>HTML</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/uzairali12/linkleap" target="_blank" title="GitHub">
+                                    <img src="assets/Github.png" alt="GitHub" class="project-icon" />
+                                </a>
+                                <a href="https://linkleap-app.netlify.app" target="_blank" title="Live Site">
+                                    <img src="assets/arrow.svg" alt="Live Site" class="project-icon" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 2 -->
+                    <div class="project-card">
+                        <div class="project-img">
+                            <img src="assets/project2.jpg" alt="LinkLeap App">
+                        </div>
+                        <div class="project-details">
+                            <h3>LinkLeap</h3>
+                            <p>Multi-user task tracker designed with usability in mind. Built using vanilla JavaScript and Bootstrap.</p>
+                            <div class="tags">
+                                <span>JavaScript</span><span>Bootstrap</span><span>UI/UX</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/uzairali12/linkleap" target="_blank" title="GitHub">
+                                    <img src="assets/Github.png" alt="GitHub" class="project-icon" />
+                                </a>
+                                <a href="https://linkleap-app.netlify.app" target="_blank" title="Live Site">
+                                    <img src="assets/arrow.svg" alt="Live Site" class="project-icon" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 3 -->
+                    <div class="project-card">
+                        <div class="project-img">
+                            <img src="assets/project3.jpg" alt="Weather App">
+                        </div>
+                        <div class="project-details">
+                            <h3>WeatherApp</h3>
+                            <p>Real-time weather tracker fetching API data and displaying it in a clean responsive layout.</p>
+                            <div class="tags">
+                                <span>React</span><span>CSS</span><span>API</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/uzairali12/linkleap" target="_blank" title="GitHub">
+                                    <img src="assets/Github.png" alt="GitHub" class="project-icon" />
+                                </a>
+                                <a href="https://linkleap-app.netlify.app" target="_blank" title="Live Site">
+                                    <img src="assets/arrow.svg" alt="Live Site" class="project-icon" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 4 -->
+                    <div class="project-card">
+                        <div class="project-img">
+                            <img src="assets/project4.jpg" alt="PixelCraft Editor">
+                        </div>
+                        <div class="project-details">
+                            <h3>PixelCraft Editor</h3>
+                            <p>A lightweight online image editor built with Canvas API and VanillaJS. Features cropping, filters, and exports.</p>
+                            <div class="tags">
+                                <span>JavaScript</span><span>Canvas API</span><span>Design</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/uzairali12/linkleap" target="_blank" title="GitHub">
+                                    <img src="assets/Github.png" alt="GitHub" class="project-icon" />
+                                </a>
+                                <a href="https://linkleap-app.netlify.app" target="_blank" title="Live Site">
+                                    <img src="assets/arrow.svg" alt="Live Site" class="project-icon" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 5 -->
+                    <div class="project-card">
+                        <div class="project-img">
+                            <img src="assets/project5.jpg" alt="StudySync LMS">
+                        </div>
+                        <div class="project-details">
+                            <h3>StudySync LMS</h3>
+                            <p>An e-learning platform with course tracking, authentication, and progress analytics using Node.js backend.</p>
+                            <div class="tags">
+                                <span>Node.js</span><span>MongoDB</span><span>EJS</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/uzairali12/linkleap" target="_blank" title="GitHub">
+                                    <img src="assets/Github.png" alt="GitHub" class="project-icon" />
+                                </a>
+                                <a href="https://linkleap-app.netlify.app" target="_blank" title="Live Site">
+                                    <img src="assets/arrow.svg" alt="Live Site" class="project-icon" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 6 -->
+                    <div class="project-card">
+                        <div class="project-img">
+                            <img src="assets/project6.jpg" alt="QuickNotes App">
+                        </div>
+                        <div class="project-details">
+                            <h3>QuickNotes</h3>
+                            <p>A minimalist note-taking app with auto-save and Markdown support. Built using React and LocalStorage.</p>
+                            <div class="tags">
+                                <span>React</span><span>Markdown</span><span>LocalStorage</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/uzairali12/linkleap" target="_blank" title="GitHub">
+                                    <img src="assets/Github.png" alt="GitHub" class="project-icon" />
+                                </a>
+                                <a href="https://linkleap-app.netlify.app" target="_blank" title="Live Site">
+                                    <img src="assets/arrow.svg" alt="Live Site" class="project-icon" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials -->
+            <section id="testimonials" tabindex="0" aria-label="Client testimonials">
+                <h2>Testimonials</h2>
+                <div class="tester-container" role="list">
+                    <article class="testimonial" tabindex="0" role="listitem" aria-label="Testimonial from Thomas">
+                        <img src="assets/testimonal-1.jpeg" alt="Portrait of Thomas" />
+                        <h3>Thomas </h3>
+                        <div class="testimonial-stars" aria-label="Five star rating">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <p>"Uzair's design skills transformed our app's user experience. Highly professional!"</p>
+                    </article>
+                    <article class="testimonial" tabindex="0" role="listitem" aria-label="Testimonial from Julia">
+                        <img src="assets/testimonal-2.jpeg" alt="Portrait of Julia" />
+                        <h3>Julia</h3>
+                        <div class="testimonial-stars" aria-label="Five star rating">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <p>"His development expertise ensured our project was delivered on time and flawlessly."</p>
+                    </article>
+                    <article class="testimonial" tabindex="0" role="listitem" aria-label="Testimonial from Jane">
+                        <img src="assets/testimonal-3.jpeg" alt="Portrait of Jane" />
+                        <h3>Jane</h3>
+                        <div class="testimonial-stars" aria-label="Five star rating">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <p>"Uzair's attention to detail and creativity made our website stand out."</p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact">
+                <h2 class="section-title">
+                    Contact <span class="highlight">Me</span>
+                </h2>
+
+                <form class="contact-form" id="contact-form">
+                    <div class="input-row">
+                        <input type="text" name="name" placeholder="Your Name" required />
+                        <input type="email" name="email" placeholder="Your Email" required />
+                    </div>
+
+                    <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+
+                    <button type="submit" class="glow-button">Send Message</button>
+                    <div id="form-message" class="form-message" aria-live="polite"></div>
+                </form>
+            </section>
+
+            <div id="MouseGlow"></div>
+            <div id="MouseGlowBlur"></div>
+        </div>
+    </div>
+
+    <button id="MainButton" type="button">🠛</button>
+
+    <audio id="ComputerBoot" src="Sounds/ComputerBoot.mp3"></audio>
+    <audio id="ComputerAmbient" src="Sounds/ComputerAmbient.mp3"></audio>
+    <audio id="ComputerBeep" src="Sounds/ComputerBeep.mp3"></audio>
+    <audio id="KeyboardPressed" src="Sounds/KeyboardPressed.mp3"></audio>
+
+    <!-- INLINE SCRIPT FIXES -->
+    <script>
+        // 1. Dynamic profession typing effect
+        const professions = [
+            "Frontend Developer",
+            "Graphic Designer",
+            "Computer Scientist",
+            "Web Developer",
+            "Tech Enthusiast"
+        ];
+        const dynamicProfessionEl = document.getElementById("dynamic-profession");
+
+        let profIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typingDelay = 150;
+        let deletingDelay = 100;
+        let pauseAfterTyping = 3000;
+        let pauseAfterDeleting = 1000;
+
+        function type() {
+            if (!dynamicProfessionEl) return;
+            const currentText = professions[profIndex];
+            const currentSubstring = currentText.substring(0, charIndex);
+
+            dynamicProfessionEl.textContent = currentSubstring;
+
+            if (!isDeleting) {
+                if (charIndex < currentText.length) {
+                    charIndex++;
+                    setTimeout(type, typingDelay);
+                } else {
+                    isDeleting = true;
+                    setTimeout(type, pauseAfterTyping);
+                }
+            } else {
+                if (charIndex > 0) {
+                    charIndex--;
+                    setTimeout(type, deletingDelay);
+                } else {
+                    isDeleting = false;
+                    profIndex = (profIndex + 1) % professions.length;
+                    setTimeout(type, pauseAfterDeleting);
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", type);
+
+        // 2. Hamburger Mobile Menu Toggle
+        const hamburger = document.getElementById("hamburger");
+        const navMenu = document.getElementById("nav-menu");
+
+        if (hamburger && navMenu) {
+            hamburger.addEventListener("click", () => {
+                hamburger.classList.toggle("open");
+                navMenu.classList.toggle("nav-open");
+                document.body.classList.toggle("no-scroll");
+
+                const expanded = hamburger.classList.contains("open");
+                hamburger.setAttribute("aria-expanded", expanded);
+            });
+        }
+
+        // 3. Nav highlight on scroll & Smooth scroll
+        const sections = document.querySelectorAll("#MainDiv section");
+        const navLinks = document.querySelectorAll("header nav a");
+
+        function onScroll() {
+            const scrollPos = window.scrollY + window.innerHeight * 0.35;
+            let currentId = "home";
+            sections.forEach(section => {
+                if (scrollPos >= section.offsetTop) {
+                    currentId = section.id;
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.toggle("active", link.getAttribute("href") === "#" + currentId);
+            });
+        }
+        window.addEventListener("scroll", onScroll);
+        window.addEventListener("resize", () => {
+            onScroll();
+            // Close mobile nav on desktop resize
+            if (window.innerWidth > 1080 && navMenu && hamburger) {
+                navMenu.classList.remove("nav-open");
+                hamburger.classList.remove("open");
+                document.body.classList.remove("no-scroll");
+            }
+        });
+        onScroll();
+
+        // Smooth scroll & Close mobile dropdown on link click
+        navLinks.forEach(link => {
+            link.addEventListener("click", e => {
+                e.preventDefault();
+                
+                // Close mobile menu if open
+                if (navMenu && hamburger) {
+                    navMenu.classList.remove("nav-open");
+                    hamburger.classList.remove("open");
+                    document.body.classList.remove("no-scroll");
+                    hamburger.setAttribute("aria-expanded", "false");
+                }
+
+                const targetId = link.getAttribute("href").substring(1);
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) {
+                    targetEl.scrollIntoView({ behavior: "smooth" });
+                }
+            });
+        });
+
+        // 4. Contact form submission handling
+        const form = document.getElementById("contact-form");
+        const formMsg = document.getElementById("form-message");
+
+        if (form) {
+            form.addEventListener("submit", e => {
+                e.preventDefault();
+                formMsg.textContent = "";
+                const formData = new FormData(form);
+
+                if (!formData.get("name").trim()) {
+                    formMsg.textContent = "Please enter your name.";
+                    formMsg.style.color = "#ff5555";
+                    return;
+                }
+                if (!formData.get("email").trim() || !formData.get("email").match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)) {
+                    formMsg.textContent = "Please enter a valid email address.";
+                    formMsg.style.color = "#ff5555";
+                    return;
+                }
+                if (!formData.get("message").trim()) {
+                    formMsg.textContent = "Please enter a message.";
+                    formMsg.style.color = "#ff5555";
+                    return;
+                }
+
+                formMsg.style.color = "#f07828";
+                formMsg.textContent = "Sending message...";
+                setTimeout(() => {
+                    formMsg.textContent = "Thank you for contacting me! I'll get back to you soon.";
+                    form.reset();
+                }, 1500);
+            });
+        }
+
+        // 5. Home buttons scroll behavior
+        const hireBtn = document.getElementById('hire-btn');
+        function scrollToContact() {
+            const el = document.getElementById('contact');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (hireBtn) hireBtn.addEventListener('click', scrollToContact);
+        if (contactBtn) contactBtn.addEventListener('click', scrollToContact);
+    </script>
+
+    <!-- External Scripts -->
+    <script src="Scripts/ModelFiles.js"></script>
+    <script src="Scripts/RenderingFunctions.js"></script>
+    <script src="Scripts/TerminalFunction.js"></script>
+    <script src="Scripts/Main.js"></script>
+
+    <!-- Optimized Grid Tracking Script -->
+    <script>
+        const gc = document.getElementById('grid-cursor');
+        let mouseX = -1000;
+        let mouseY = -1000;
+        let rafPending = false;
+
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            if (!rafPending && gc) {
+                rafPending = true;
+                requestAnimationFrame(() => {
+                    gc.style.setProperty('--mx', mouseX + 'px');
+                    gc.style.setProperty('--my', mouseY + 'px');
+                    gc.classList.add('active');
+                    rafPending = false;
+                });
+            }
+        });
+
+        document.addEventListener('mouseleave', () => {
+            if (gc) gc.classList.remove('active');
+        });
+    </script>
+</body>
+
+</html>
