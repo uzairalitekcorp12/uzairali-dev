@@ -20,3 +20,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Vercel project link (local machine only)
+.vercel
