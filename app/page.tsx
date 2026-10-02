@@ -1,0 +1,266 @@
+import Image from "next/image";
+import {
+  ArrowDown,
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  Code2,
+  Github,
+  Instagram,
+  Linkedin,
+  MapPin,
+  MessageCircle,
+  Sparkles,
+  Star,
+} from "lucide-react";
+import profileImage from "@/assets/img/img 4.jpg";
+import testimonialOne from "@/assets/testimonal-1.jpeg";
+import testimonialTwo from "@/assets/testimonal-2.jpeg";
+import testimonialThree from "@/assets/testimonal-3.jpeg";
+import { ContactForm } from "@/components/contact-form";
+import { CosmicScene } from "@/components/cosmic-scene";
+import { IntroGate } from "@/components/intro-gate";
+import { PortfolioDesktop } from "@/components/portfolio-desktop";
+import { ScrollReveal } from "@/components/scroll-reveal";
+import { SiteHeader } from "@/components/site-header";
+import { portfolio } from "@/data/portfolio";
+
+const testimonialImages = [testimonialOne, testimonialTwo, testimonialThree];
+
+export default function HomePage() {
+  return (
+    <>
+      <IntroGate />
+      <ScrollReveal />
+      <SiteHeader />
+
+      <main>
+        <section id="home" className="hero-section">
+          <div className="hero-grid" />
+          <div className="hero-glow hero-glow--one" />
+          <div className="hero-glow hero-glow--two" />
+
+          <div className="hero-copy">
+            <p className="hero-eyebrow"><span /> {portfolio.person.availability}</p>
+            <h1>
+              I make digital
+              <span>ideas feel real.</span>
+            </h1>
+            <p className="hero-summary">{portfolio.person.intro}</p>
+
+            <div className="hero-actions">
+              <a href="#work" className="button button--primary">
+                Explore my work <ArrowRight />
+              </a>
+              <a href="/resume" className="button button--ghost" target="_blank">
+                View résumé <ArrowUpRight />
+              </a>
+            </div>
+
+            <div className="hero-meta">
+              <span><MapPin /> {portfolio.person.location}</span>
+              <span><Code2 /> Building for the modern web</span>
+            </div>
+          </div>
+
+          <div className="hero-visual" aria-label="Portrait of Uzair Ali with an interactive black hole visualization">
+            <CosmicScene className="hero-canvas" />
+            <div className="portrait-frame">
+              <div className="portrait-image">
+                <Image
+                  src={profileImage}
+                  alt="Uzair Ali"
+                  fill
+                  sizes="(max-width: 768px) 76vw, 34vw"
+                  placeholder="blur"
+                  priority
+                />
+              </div>
+              <div className="portrait-label">
+                <span>UZR — 001</span>
+                <span>KHI / PK</span>
+              </div>
+            </div>
+            <div className="hero-float-card">
+              <Sparkles />
+              <div><strong>Creative engineering</strong><span>Design × code × motion</span></div>
+            </div>
+            <span className="orbit-label">THREE.JS / LIVE</span>
+          </div>
+
+          <a className="scroll-cue" href="#about"><span>Scroll to discover</span><ArrowDown /></a>
+        </section>
+
+        <div className="marquee" aria-hidden="true">
+          <div>
+            {[...portfolio.skills, ...portfolio.skills].map((skill, index) => (
+              <span key={`${skill}-${index}`}>{skill}<i>✦</i></span>
+            ))}
+          </div>
+        </div>
+
+        <section id="about" className="section-shell about-section" data-reveal>
+          <div className="section-heading" data-reveal-child>
+            <p className="section-index">01 / ABOUT</p>
+            <h2>Design instinct.<br /><span>Engineering discipline.</span></h2>
+          </div>
+          <div className="about-layout">
+            <div className="about-statement" data-reveal-child>
+              <p>
+                I&apos;m a Computer Science student and multidisciplinary maker who likes the point where
+                a sharp visual idea becomes a useful, dependable product.
+              </p>
+              <p>
+                My work moves from interface design to frontend architecture and full-stack delivery—always
+                with close attention to detail, performance, and the person on the other side of the screen.
+              </p>
+              <a href="#contact">More about working together <ArrowUpRight /></a>
+            </div>
+            <div className="about-stats" data-reveal-child>
+              {portfolio.stats.map((stat) => (
+                <div key={stat.label}><strong>{stat.value}</strong><span>{stat.label}</span></div>
+              ))}
+            </div>
+          </div>
+
+          <div className="services-list" data-reveal>
+            {portfolio.services.map((service) => (
+              <article key={service.number} data-reveal-child>
+                <span>{service.number}</span>
+                <div>
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                </div>
+                <ul>{service.tags.map((tag) => <li key={tag}><Check /> {tag}</li>)}</ul>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="work" className="work-section" data-reveal>
+          <div className="section-shell">
+            <div className="section-heading section-heading--row" data-reveal-child>
+              <div>
+                <p className="section-index">02 / SELECTED WORK</p>
+                <h2>Made to be<br /><span>used and remembered.</span></h2>
+              </div>
+              <p>A selection of product interfaces, web builds, and creative experiments.</p>
+            </div>
+
+            <div className="projects-grid">
+              {portfolio.projects.map((project, index) => (
+                <article className={`project-card project-card--${project.accent}`} key={project.title} data-reveal-child>
+                  <div className="project-art">
+                    <span className="project-number">{project.number}</span>
+                    <div className="project-browser">
+                      <i /><i /><i />
+                      <div className="project-browser-art"><span /><span /><span /></div>
+                    </div>
+                    <p>{index % 2 === 0 ? "PRODUCT / WEB" : "INTERFACE / LAB"}</p>
+                  </div>
+                  <div className="project-info">
+                    <p>{project.kind}</p>
+                    <h3>{project.title}</h3>
+                    <p>{project.description}</p>
+                    <div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+                    <div className="project-actions">
+                      <a href={project.live} target="_blank" rel="noreferrer">View project <ArrowUpRight /></a>
+                      <a href={project.github} target="_blank" rel="noreferrer" aria-label={`${project.title} source code`}><Github /></a>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="experience" className="section-shell journey-section" data-reveal>
+          <div className="section-heading" data-reveal-child>
+            <p className="section-index">03 / JOURNEY</p>
+            <h2>Always learning.<br /><span>Always shipping.</span></h2>
+          </div>
+
+          <div className="journey-grid">
+            <div data-reveal-child>
+              <p className="journey-title">Experience</p>
+              {portfolio.experience.map((item) => (
+                <article className="timeline-row" key={`${item.role}-${item.period}`}>
+                  <p>{item.period}</p>
+                  <div><h3>{item.role}</h3><span>{item.company}</span><p>{item.description}</p></div>
+                </article>
+              ))}
+            </div>
+            <div data-reveal-child>
+              <p className="journey-title">Education</p>
+              {portfolio.education.map((item) => (
+                <article className="timeline-row" key={`${item.title}-${item.place}`}>
+                  <p>{item.period}</p>
+                  <div><h3>{item.title}</h3><span>{item.place}</span><p>{item.detail}</p></div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="playground" className="playground-section" data-reveal>
+          <div className="section-shell">
+            <div className="section-heading section-heading--center" data-reveal-child>
+              <p className="section-index">04 / INTERACTIVE PLAYGROUND</p>
+              <h2>This computer is<br /><span>not just decoration.</span></h2>
+              <p>Explore my files, type into the terminal, or take a break with Snake and Pong.</p>
+            </div>
+            <div data-reveal-child><PortfolioDesktop /></div>
+          </div>
+        </section>
+
+        <section className="section-shell testimonials-section" data-reveal>
+          <div className="section-heading section-heading--row" data-reveal-child>
+            <div>
+              <p className="section-index">05 / KIND WORDS</p>
+              <h2>Good work creates<br /><span>good relationships.</span></h2>
+            </div>
+            <div className="rating"><strong>5.0</strong><span>{Array.from({ length: 5 }, (_, index) => <Star key={index} fill="currentColor" />)}</span><small>Client feedback</small></div>
+          </div>
+          <div className="testimonials-grid">
+            {portfolio.testimonials.map((testimonial, index) => (
+              <article key={testimonial.name} data-reveal-child>
+                <div className="quote-mark">“</div>
+                <blockquote>{testimonial.quote}</blockquote>
+                <footer>
+                  <Image src={testimonialImages[index]} alt="" width={52} height={52} placeholder="blur" />
+                  <div><strong>{testimonial.name}</strong><span>{testimonial.role}</span></div>
+                </footer>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="contact" className="contact-section" data-reveal>
+          <div className="contact-orbit" aria-hidden="true"><i /><i /><i /></div>
+          <div className="section-shell contact-inner">
+            <div className="contact-copy" data-reveal-child>
+              <p className="section-index">06 / CONTACT</p>
+              <h2>Have an idea?<br /><span>Let&apos;s make it real.</span></h2>
+              <p>
+                Tell me what you&apos;re building, what&apos;s getting in the way, or simply what you&apos;re curious about.
+              </p>
+              <div className="contact-socials">
+                <a href={portfolio.socials.github} target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
+                <a href={portfolio.socials.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin /></a>
+                <a href={portfolio.socials.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram /></a>
+                <a href={portfolio.socials.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle /></a>
+              </div>
+            </div>
+            <div data-reveal-child><ContactForm /></div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <a href="#home" className="site-logo"><span>UA</span><i /></a>
+        <p>Designed and built with care in Karachi.</p>
+        <p>© {new Date().getFullYear()} Uzair Ali</p>
+      </footer>
+    </>
+  );
+}
