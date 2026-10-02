@@ -1,10 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
   Check,
   Code2,
+  Download,
   Github,
   Instagram,
   Linkedin,
@@ -14,18 +16,15 @@ import {
   Star,
 } from "lucide-react";
 import profileImage from "@/assets/img/img 4.jpg";
-import testimonialOne from "@/assets/testimonal-1.jpeg";
-import testimonialTwo from "@/assets/testimonal-2.jpeg";
-import testimonialThree from "@/assets/testimonal-3.jpeg";
+import { BlackHoleHeroSection } from "@/components/ui/black-hole-hero-section";
 import { ContactForm } from "@/components/contact-form";
-import { CosmicScene } from "@/components/cosmic-scene";
 import { IntroGate } from "@/components/intro-gate";
 import { PortfolioDesktop } from "@/components/portfolio-desktop";
+import { ProjectSlider } from "@/components/project-slider";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteHeader } from "@/components/site-header";
+import { TestimonialsSlider } from "@/components/testimonials-slider";
 import { portfolio } from "@/data/portfolio";
-
-const testimonialImages = [testimonialOne, testimonialTwo, testimonialThree];
 
 export default function HomePage() {
   return (
@@ -53,7 +52,10 @@ export default function HomePage() {
                 Explore my work <ArrowRight />
               </a>
               <a href="/resume" className="button button--ghost" target="_blank">
-                View résumé <ArrowUpRight />
+                Open résumé <ArrowUpRight />
+              </a>
+              <a href="/resume?download=1" className="button button--ghost" download>
+                Download <Download />
               </a>
             </div>
 
@@ -64,7 +66,9 @@ export default function HomePage() {
           </div>
 
           <div className="hero-visual" aria-label="Portrait of Uzair Ali with an interactive black hole visualization">
-            <CosmicScene className="hero-canvas" />
+            <div className="hero-black-hole">
+              <BlackHoleHeroSection />
+            </div>
             <div className="portrait-frame">
               <div className="portrait-image">
                 <Image
@@ -85,7 +89,6 @@ export default function HomePage() {
               <Sparkles />
               <div><strong>Creative engineering</strong><span>Design × code × motion</span></div>
             </div>
-            <span className="orbit-label">THREE.JS / LIVE</span>
           </div>
 
           <a className="scroll-cue" href="#about"><span>Scroll to discover</span><ArrowDown /></a>
@@ -147,29 +150,9 @@ export default function HomePage() {
               <p>A selection of product interfaces, web builds, and creative experiments.</p>
             </div>
 
-            <div className="projects-grid">
-              {portfolio.projects.map((project, index) => (
-                <article className={`project-card project-card--${project.accent}`} key={project.title} data-reveal-child>
-                  <div className="project-art">
-                    <span className="project-number">{project.number}</span>
-                    <div className="project-browser">
-                      <i /><i /><i />
-                      <div className="project-browser-art"><span /><span /><span /></div>
-                    </div>
-                    <p>{index % 2 === 0 ? "PRODUCT / WEB" : "INTERFACE / LAB"}</p>
-                  </div>
-                  <div className="project-info">
-                    <p>{project.kind}</p>
-                    <h3>{project.title}</h3>
-                    <p>{project.description}</p>
-                    <div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
-                    <div className="project-actions">
-                      <a href={project.live} target="_blank" rel="noreferrer">View project <ArrowUpRight /></a>
-                      <a href={project.github} target="_blank" rel="noreferrer" aria-label={`${project.title} source code`}><Github /></a>
-                    </div>
-                  </div>
-                </article>
-              ))}
+            <ProjectSlider />
+            <div className="all-projects-link">
+              <Link href="/projects">View the complete project archive <ArrowRight /></Link>
             </div>
           </div>
         </section>
@@ -221,18 +204,7 @@ export default function HomePage() {
             </div>
             <div className="rating"><strong>5.0</strong><span>{Array.from({ length: 5 }, (_, index) => <Star key={index} fill="currentColor" />)}</span><small>Client feedback</small></div>
           </div>
-          <div className="testimonials-grid">
-            {portfolio.testimonials.map((testimonial, index) => (
-              <article key={testimonial.name} data-reveal-child>
-                <div className="quote-mark">“</div>
-                <blockquote>{testimonial.quote}</blockquote>
-                <footer>
-                  <Image src={testimonialImages[index]} alt="" width={52} height={52} placeholder="blur" />
-                  <div><strong>{testimonial.name}</strong><span>{testimonial.role}</span></div>
-                </footer>
-              </article>
-            ))}
-          </div>
+          <TestimonialsSlider />
         </section>
 
         <section id="contact" className="contact-section" data-reveal>

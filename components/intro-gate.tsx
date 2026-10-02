@@ -3,16 +3,16 @@
 import { animate, stagger } from "animejs";
 import { ArrowDown, CornerDownLeft } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { CosmicScene } from "@/components/cosmic-scene";
+import { SpiralAnimation } from "@/components/ui/spiral-animation";
 
 export function IntroGate() {
   const [visible, setVisible] = useState(true);
-  const [leaving, setLeaving] = useState(false);
+  const leavingRef = useRef(false);
   const shellRef = useRef<HTMLDivElement>(null);
 
   const enter = useCallback(() => {
-    if (leaving) return;
-    setLeaving(true);
+    if (leavingRef.current) return;
+    leavingRef.current = true;
     const shell = shellRef.current;
     if (shell) {
       animate(shell, {
@@ -28,7 +28,7 @@ export function IntroGate() {
       setVisible(false);
       window.scrollTo({ top: 0, behavior: "instant" });
     }, 820);
-  }, [leaving]);
+  }, []);
 
   useEffect(() => {
     document.body.dataset.intro = "open";
@@ -61,8 +61,7 @@ export function IntroGate() {
 
   return (
     <div ref={shellRef} className="intro-gate" role="dialog" aria-label="Portfolio introduction">
-      <CosmicScene mode="intro" className="intro-canvas" />
-      <div className="intro-noise" />
+      <div className="intro-canvas"><SpiralAnimation /></div>
       <div className="intro-topline" data-intro-item>
         <span>UA / PORTFOLIO</span>
         <span className="intro-status"><i /> SYSTEM ONLINE</span>

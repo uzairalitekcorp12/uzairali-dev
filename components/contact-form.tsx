@@ -4,19 +4,34 @@ import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 export function ContactForm() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [message, setMessage] = useState("");
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const name = String(data.get("name") ?? "");
-    const email = String(data.get("email") ?? "");
-    const message = String(data.get("message") ?? "");
-    const text = encodeURIComponent(
-      `Hello Uzair! I'm ${name} (${email}).\n\n${message}`,
-    );
-    window.open(`https://wa.me/923282626204?text=${text}`, "_blank", "noopener,noreferrer");
-    setSent(true);
+    setStatus("sending");
+    setMessage("");
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(data.entries())),
+      });
+      const payload = await response.json() as { error?: string };
+      if (!response.ok) {
+        setStatus("error");
+        setMessage(payload.error ?? "Your message could not be sent. Please try again.");
+        return;
+      }
+      form.reset();
+      setStatus("sent");
+      setMessage("Message received. I’ll get back to you soon.");
+    } catch {
+      setStatus("error");
+      setMessage("The connection failed. Please try again in a moment.");
+    }
   };
 
   return (
@@ -35,10 +50,14 @@ export function ContactForm() {
         <span>Tell me about the project</span>
         <textarea name="message" rows={5} placeholder="A quick overview, timeline, and what success looks like…" required />
       </label>
+      <label className="form-honeypot" aria-hidden="true">
+        <span>Company</span>
+        <input name="company" type="text" tabIndex={-1} autoComplete="off" />
+      </label>
       <div className="form-submit-row">
-        <button type="submit">Start a conversation <ArrowUpRight /></button>
-        <p aria-live="polite">
-          {sent ? <><CheckCircle2 /> Message prepared in WhatsApp.</> : "Usually replies within 24–48 hours."}
+        <button type="submit" disabled={status === "sending"}>{status === "sending" ? "Sending…" : "Start a conversation"} <ArrowUpRight /></button>
+        <p aria-live="polite" className={status === "error" ? "form-error" : ""}>
+          {status === "sent" ? <><CheckCircle2 /> {message}</> : status === "error" ? message : "Usually replies within 24–48 hours."}
         </p>
       </div>
     </form>

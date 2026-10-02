@@ -12,6 +12,8 @@
 .DS_Store
 *.pem
 .env*
+!.env.example
+.data/
 
 # debug
 npm-debug.log*

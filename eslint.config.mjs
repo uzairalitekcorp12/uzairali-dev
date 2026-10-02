@@ -13,5 +13,6 @@ export default defineConfig([
     "Scripts/**",
     "Styles/**",
     "index.html",
+    "components/ui/black-hole-hero-section.tsx",
   ]),
 ]);
