@@ -19,7 +19,7 @@ export function IntroGate() {
         opacity: 0,
         scale: 1.04,
         filter: "blur(12px)",
-        duration: 850,
+        duration: 825,
         ease: "inOutExpo",
       });
     }
@@ -27,7 +27,7 @@ export function IntroGate() {
     window.setTimeout(() => {
       setVisible(false);
       window.scrollTo({ top: 0, behavior: "instant" });
-    }, 820);
+    }, 795);
   }, []);
 
   useEffect(() => {
@@ -37,8 +37,8 @@ export function IntroGate() {
       animate(targets, {
         opacity: 1,
         y: { from: 24 },
-        duration: 1100,
-        delay: stagger(130, { start: 450 }),
+        duration: 1068,
+        delay: stagger(126, { start: 436 }),
         ease: "outExpo",
       });
     }
@@ -63,17 +63,17 @@ export function IntroGate() {
     <div ref={shellRef} className="intro-gate" role="dialog" aria-label="Portfolio introduction">
       <div className="intro-canvas"><SpiralAnimation /></div>
       <div className="intro-topline" data-intro-item>
-        <span>UA / PORTFOLIO</span>
-        <span className="intro-status"><i /> SYSTEM ONLINE</span>
+        <span>UZAIR ALI</span>
+        <span className="intro-status">SELECTED WORK</span>
       </div>
 
       <div className="intro-copy">
-        <p data-intro-item className="eyebrow">A digital universe by</p>
+        <p data-intro-item className="eyebrow">Independent designer + developer</p>
         <h1 data-intro-item>
           UZAIR <span>ALI</span>
         </h1>
         <p data-intro-item className="intro-subtitle">
-          Developer. Designer. Builder of thoughtful digital experiences.
+          Thoughtful digital experiences, shaped from concept to code.
         </p>
         <button data-intro-item type="button" onClick={enter} className="intro-enter">
           <span>Enter portfolio</span>

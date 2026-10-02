@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+export const runtime = "nodejs";
+
 export default async function AdminPage() {
   const authenticated = await isAdminAuthenticated();
   if (!authenticated) return <AdminLogin configured={adminIsConfigured()} />;

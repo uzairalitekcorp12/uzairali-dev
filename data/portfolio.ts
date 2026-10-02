@@ -27,7 +27,7 @@ export const portfolio = {
   },
   stats: [
     { value: "03+", label: "Years building" },
-    { value: "12+", label: "Projects shipped" },
+    { value: "16", label: "Public repositories" },
     { value: "04", label: "Core disciplines" },
   ],
   skills: [
@@ -75,135 +75,135 @@ export const portfolio = {
   projects: [
     {
       number: "01",
-      slug: "savvy-idea",
-      title: "Savvy Idea",
-      kind: "Wedding planning platform",
-      year: "2025",
+      slug: "tekbooks",
+      title: "TekBooks",
+      kind: "Multi-platform TypeScript product",
+      year: "2026",
       description:
-        "A high-touch planning experience built around clear discovery, quick navigation, and a refined responsive interface.",
+        "A TypeScript product workspace with a Node backend and a companion Expo mobile application.",
       overview:
-        "A responsive wedding-planning experience that turns a complicated service journey into a calm, guided flow.",
+        "A public full-stack codebase connecting a production-minded Express API, MongoDB data layer, and Expo mobile experience.",
       challenge:
-        "Organize a large amount of planning information without making the experience feel heavy or overwhelming.",
+        "Keep backend workflows, document handling, and a mobile client aligned in one maintainable product codebase.",
       solution:
-        "A modular interface, clear information hierarchy, and mobile-first navigation built with reusable Next.js sections.",
+        "A TypeScript workspace with Express, MongoDB, JWT authentication, S3-compatible storage tooling, and an Expo Router mobile app.",
       outcome:
-        "A fast, polished platform foundation that can grow with new vendors, planning tools, and editorial content.",
-      tags: ["Next.js", "Tailwind CSS", "Responsive"],
+        "A public repository that demonstrates the architecture behind a backend and mobile application working as one product.",
+      tags: ["TypeScript", "Express", "MongoDB", "Expo"],
       accent: "violet",
       image: "",
-      github: "https://github.com/uzairali12/linkleap",
-      live: "https://linkleap-app.netlify.app",
+      github: "https://github.com/uzairali12/tekbooks1",
+      live: "",
     },
     {
       number: "02",
-      slug: "linkleap",
-      title: "LinkLeap",
-      kind: "Collaborative task workspace",
-      year: "2025",
+      slug: "bseccure",
+      title: "BSeccure",
+      kind: "Cybersecurity web experience",
+      year: "2026",
       description:
-        "A multi-user productivity concept that keeps project status, tasks, and team actions easy to scan and update.",
+        "A responsive cybersecurity website with services, insights, contact UI, and a rotating D3 Earth visual.",
       overview:
-        "A focused team workspace for tracking tasks, project movement, and the work that needs attention next.",
+        "A polished digital presence for a cybersecurity brand, built around an animated globe, clear services, and responsive storytelling.",
       challenge:
-        "Make dense project activity understandable at a glance for both individual contributors and small teams.",
+        "Create a security-focused experience that feels technical and credible while staying fast and approachable across devices.",
       solution:
-        "A status-led dashboard, lightweight interaction patterns, and a compact visual language designed around daily use.",
+        "A Next.js and TypeScript implementation with a D3 globe, responsive navigation, modular sections, and tailored visual states.",
       outcome:
-        "A flexible product concept that demonstrates end-to-end product thinking from interface structure to interaction design.",
-      tags: ["JavaScript", "Product design", "Local data"],
+        "A responsive public demo that brings brand storytelling, interaction design, and frontend engineering into one experience.",
+      tags: ["Next.js", "TypeScript", "Tailwind CSS", "D3"],
       accent: "cyan",
       image: "",
-      github: "https://github.com/uzairali12/linkleap",
-      live: "https://linkleap-app.netlify.app",
+      github: "https://github.com/uzairali12/BSeccure",
+      live: "https://bseccure.vercel.app",
     },
     {
       number: "03",
-      slug: "weather-atlas",
-      title: "Weather Atlas",
-      kind: "Live weather dashboard",
-      year: "2024",
+      slug: "resumeguard",
+      title: "ResumeGuard",
+      kind: "AI resume fraud detector",
+      year: "2026",
       description:
-        "A focused data experience that translates changing forecast information into an approachable visual dashboard.",
+        "A resume analysis tool for surfacing timeline overlaps, experience inflation, credibility signals, and other fraud indicators.",
       overview:
-        "A clean real-time weather dashboard for quickly reading current conditions and near-term forecasts.",
+        "A focused upload-to-result flow that gives recruiters an understandable first-pass view of potential resume fraud.",
       challenge:
-        "Present multiple weather values and changing API states without creating a visually noisy dashboard.",
+        "Turn a complex set of credibility signals into an interface that feels clear, quick, and privacy conscious.",
       solution:
-        "Prioritized data groups, resilient loading states, and a responsive layout that keeps primary conditions prominent.",
+        "A PDF and DOCX upload interface paired with ML-powered analysis, readable result views, and a saved-history flow.",
       outcome:
-        "A compact API-driven interface that remains readable across phone, tablet, and desktop screens.",
-      tags: ["React", "API", "Data UI"],
+        "A public prototype that communicates a complex screening workflow through a calm, straightforward product interface.",
+      tags: ["Machine learning", "PDF / DOCX", "JavaScript", "UX"],
       accent: "amber",
       image: "",
-      github: "https://github.com/uzairali12",
-      live: "https://github.com/uzairali12",
+      github: "https://github.com/uzairali12/resume-fraud-detector",
+      live: "",
     },
     {
       number: "04",
-      slug: "pixelcraft",
-      title: "PixelCraft",
-      kind: "Browser image editor",
-      year: "2024",
+      slug: "symptoscan",
+      title: "SymptoScan",
+      kind: "AI symptom analysis dashboard",
+      year: "2026",
       description:
-        "A lightweight Canvas-based editor exploring crop, filter, adjustment, and export workflows directly in the browser.",
+        "An AI-powered symptom analysis interface with confidence scoring, clinical insights, analytics, and session history.",
       overview:
-        "An in-browser image editor that keeps common creative tools quick, understandable, and close to the canvas.",
+        "A health dashboard designed to make symptom analysis and confidence signals easier to scan without overwhelming the user.",
       challenge:
-        "Deliver useful editing controls while maintaining immediate visual feedback and a lightweight browser footprint.",
+        "Present health-related insights with a calm visual hierarchy while supporting diagnosis, analytics, history, and account flows.",
       solution:
-        "Canvas API rendering, direct manipulation controls, and a focused tool architecture for crop, filters, and export.",
+        "A responsive single-page interface with a dedicated diagnostic dashboard, Supabase integration, and a custom scanner visual system.",
       outcome:
-        "A capable creative utility that demonstrates browser graphics work and detailed interaction design.",
-      tags: ["Canvas API", "JavaScript", "Interaction"],
+        "A public demo that combines product UX, visual design, and a multi-view healthcare workflow in one cohesive application.",
+      tags: ["Supabase", "JavaScript", "Analytics", "Health UX"],
       accent: "rose",
       image: "",
-      github: "https://github.com/uzairali12",
-      live: "https://github.com/uzairali12",
+      github: "https://github.com/uzairali12/SymptoScan",
+      live: "https://sympto-scan-health.vercel.app/",
     },
     {
       number: "05",
-      slug: "studysync-lms",
-      title: "StudySync LMS",
-      kind: "Learning management platform",
-      year: "2024",
+      slug: "restaurio-pro",
+      title: "Restaurio Pro",
+      kind: "Restaurant point-of-sale system",
+      year: "2026",
       description:
-        "An e-learning platform with course tracking, authentication, and progress analytics backed by Node.js and MongoDB.",
+        "A responsive restaurant POS system for orders, billing, kitchen tickets, menu management, and daily sales tracking.",
       overview:
-        "A learning workspace that brings course progress, content, and student activity into one straightforward experience.",
+        "A browser-based cashier experience with realistic restaurant workflows, designed to stay quick at the point of service.",
       challenge:
-        "Keep learner progress and course content easy to understand across several roles and content states.",
+        "Bring order handling, billing, stock awareness, receipt printing, and sales tracking together without a heavy framework.",
       solution:
-        "Role-aware flows, structured course data, and dashboards that emphasize progress and next actions.",
+        "A single-file HTML, CSS, and JavaScript application with local storage, keyboard shortcuts, responsive layouts, and light/dark themes.",
       outcome:
-        "A full-stack learning product foundation with authentication, persistent data, and reporting-ready structures.",
-      tags: ["Node.js", "MongoDB", "EJS"],
+        "A public, working POS prototype that shows detailed product behavior from cart management through receipt and sales workflows.",
+      tags: ["JavaScript", "LocalStorage", "Responsive UI", "POS"],
       accent: "lime",
       image: "",
-      github: "https://github.com/uzairali12",
-      live: "https://github.com/uzairali12",
+      github: "https://github.com/uzairali12/Restaurio-Pro---A-Resturant-POS-system-",
+      live: "https://restaurio-pro-a-resturant-pos-syste.vercel.app",
     },
     {
       number: "06",
-      slug: "quicknotes",
-      title: "QuickNotes",
-      kind: "Minimal notes workspace",
-      year: "2023",
+      slug: "hospital-management-system",
+      title: "Hospital Management System",
+      kind: "Java + MySQL operations platform",
+      year: "2026",
       description:
-        "A distraction-free note app with automatic saving, Markdown support, and a compact responsive workspace.",
+        "A Java desktop application that manages patient records, staff information, rooms, admissions, and ambulance activity with MySQL.",
       overview:
-        "A small, fast writing tool designed for capturing and organizing ideas without interrupting the thought process.",
+        "A centralized hospital operations platform that replaces manual record keeping with a structured, role-aware administration workflow.",
       challenge:
-        "Make writing feel immediate while reliably preserving content and keeping the interface out of the way.",
+        "Digitize hospital administration while keeping patient, employee, room, and emergency data easy to manage in real time.",
       solution:
-        "Automatic local persistence, Markdown rendering, and a minimal React component system.",
+        "A Java Swing interface connected to MySQL through JDBC, with modules for login, reception, patient intake, rooms, employees, and ambulances.",
       outcome:
-        "A dependable offline-friendly utility and a practical exploration of local-first interaction patterns.",
-      tags: ["React", "Markdown", "LocalStorage"],
+        "A public system that demonstrates object-oriented design, desktop UI development, database work, and operational problem solving.",
+      tags: ["Java", "MySQL", "Swing", "JDBC"],
       accent: "cyan",
       image: "",
-      github: "https://github.com/uzairali12",
-      live: "https://github.com/uzairali12",
+      github: "https://github.com/uzairali12/Hospital-Mangement-System",
+      live: "",
     },
   ],
   education: [
@@ -277,6 +277,11 @@ export const portfolio = {
 
 export type ProjectAccent = "violet" | "cyan" | "amber" | "rose" | "lime";
 
+export type ProjectMetric = {
+  value: string;
+  label: string;
+};
+
 export type Project = {
   number: string;
   slug: string;
@@ -291,6 +296,9 @@ export type Project = {
   tags: readonly string[];
   accent: ProjectAccent;
   image?: string;
+  imageAlt?: string;
+  gallery?: readonly string[];
+  metrics?: readonly ProjectMetric[];
   github: string;
   live: string;
 };

@@ -35,7 +35,7 @@ class AnimationController {
     private readonly cameraTravelDistance = 3400
     private readonly startDotYOffset = 28
     private readonly viewZoom = 100
-    private readonly numberOfStars = 5000
+    private readonly numberOfStars = 1800
     private readonly trailLength = 80
     
     constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, dpr: number, size: number) {
@@ -44,7 +44,6 @@ class AnimationController {
         this.dpr = dpr
         this.size = size
         // 初始化
-        this.setupRandomGenerator()
         this.createStars()
         this.setupTimeline()
     }
@@ -61,7 +60,6 @@ class AnimationController {
         }
         
         Math.random = customRandom()
-        this.createStars()
         Math.random = originalRandom
     }
     
@@ -413,7 +411,7 @@ export function SpiralAnimation() {
         if (!ctx) return
         
         // 处理DPR以解决模糊问题
-        const dpr = window.devicePixelRatio || 1
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.25)
         // 使用全屏尺寸
         const size = Math.max(dimensions.width, dimensions.height)
         

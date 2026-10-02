@@ -8,6 +8,7 @@ import {
   Code2,
   Download,
   Github,
+  Heart,
   Instagram,
   Linkedin,
   MapPin,
@@ -16,10 +17,10 @@ import {
   Star,
 } from "lucide-react";
 import profileImage from "@/assets/img/img 4.jpg";
-import { BlackHoleHeroSection } from "@/components/ui/black-hole-hero-section";
+import { HeroAmbient } from "@/components/hero-ambient";
 import { ContactForm } from "@/components/contact-form";
 import { IntroGate } from "@/components/intro-gate";
-import { PortfolioDesktop } from "@/components/portfolio-desktop";
+import { PortfolioDesktopDeferred } from "@/components/portfolio-desktop-deferred";
 import { ProjectSlider } from "@/components/project-slider";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteHeader } from "@/components/site-header";
@@ -27,7 +28,7 @@ import { TestimonialsSlider } from "@/components/testimonials-slider";
 import { portfolio } from "@/data/portfolio";
 import { getPortfolioContent } from "@/lib/portfolio-content";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default async function HomePage() {
   const content = await getPortfolioContent();
@@ -46,8 +47,8 @@ export default async function HomePage() {
           <div className="hero-copy">
             <p className="hero-eyebrow"><span /> {portfolio.person.availability}</p>
             <h1>
-              I make digital
-              <span>ideas feel real.</span>
+              Digital work
+              <span>with clear intent.</span>
             </h1>
             <p className="hero-summary">{portfolio.person.intro}</p>
 
@@ -69,10 +70,8 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="hero-visual" aria-label="Portrait of Uzair Ali with an interactive black hole visualization">
-            <div className="hero-black-hole">
-              <BlackHoleHeroSection focus={[0.42, 0.5]} steps={260} resolution={0.65} />
-            </div>
+          <div className="hero-visual" aria-label="Portrait of Uzair Ali">
+            <HeroAmbient />
             <div className="portrait-frame">
               <div className="portrait-image">
                 <Image
@@ -196,7 +195,7 @@ export default async function HomePage() {
               <h2>This computer is<br /><span>not just decoration.</span></h2>
               <p>Explore my files, type into the terminal, or take a break with Snake and Pong.</p>
             </div>
-            <div data-reveal-child><PortfolioDesktop content={content} /></div>
+            <div data-reveal-child><PortfolioDesktopDeferred content={content} /></div>
           </div>
         </section>
 
@@ -234,7 +233,7 @@ export default async function HomePage() {
 
       <footer className="site-footer">
         <div className="footer-brand">
-          <a href="#home" className="footer-wordmark">Uzair <span>Ali</span><i /></a>
+          <a href="#home" className="footer-wordmark">Uzair <span>Ali</span><Heart className="footer-heart" aria-hidden="true" fill="currentColor" /></a>
           <p>Creative developer building thoughtful interfaces, useful products, and memorable digital experiences.</p>
         </div>
         <nav aria-label="Footer navigation">

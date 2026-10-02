@@ -1,10 +1,10 @@
 "use client";
 
-import { BriefcaseBusiness, GraduationCap, Image as ImageIcon, Plus, Save, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { BriefcaseBusiness, FileUp, GraduationCap, Image as ImageIcon, Plus, Save, Trash2 } from "lucide-react";
+import { useState } from "react";
 import type { AdminData } from "@/lib/admin-types";
-import { defaultPortfolioContent } from "@/lib/portfolio-content";
-import type { EducationItem, ExperienceItem, PortfolioContent, Project } from "@/data/portfolio";
+import { defaultPortfolioContent } from "@/lib/portfolio-content-shared";
+import type { EducationItem, ExperienceItem, PortfolioContent, Project, ProjectMetric } from "@/data/portfolio";
 
 const clone = (content: PortfolioContent) => JSON.parse(JSON.stringify(content)) as PortfolioContent;
 
@@ -25,6 +25,62 @@ function Field({ label, value, onChange, multiline = false, placeholder = "" }: 
   );
 }
 
+function AssetField({ label, value, onChange, placeholder = "https://… or /projects/image.jpg" }: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const upload = async (file: File) => {
+    setUploading(true);
+    setMessage("");
+    try {
+      const body = new FormData();
+      body.set("file", file);
+      body.set("folder", "projects");
+      const response = await fetch("/api/admin/uploads", { method: "POST", body });
+      const payload = await response.json() as { url?: string; error?: string };
+      if (!response.ok || !payload.url) throw new Error(payload.error ?? "Unable to upload image.");
+      onChange(payload.url);
+      setMessage("Uploaded to Supabase Storage. Save all changes to publish it.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Unable to upload image.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="admin-asset-field">
+      <Field label={label} value={value} placeholder={placeholder} onChange={onChange} />
+      <div className="admin-asset-actions">
+        <label className="admin-upload-button">
+          <FileUp /> {uploading ? "Uploading…" : "Upload image"}
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/avif"
+            disabled={uploading}
+            onChange={(event) => {
+              const file = event.currentTarget.files?.[0];
+              if (file) void upload(file);
+              event.currentTarget.value = "";
+            }}
+          />
+        </label>
+        <small>Uses Supabase Storage after its environment variables are configured.</small>
+      </div>
+      {message && <p className="admin-asset-message" role="status">{message}</p>}
+    </div>
+  );
+}
+
+function previewStyle(image: string) {
+  return /^(?:https?:\/\/|\/)/i.test(image) ? { backgroundImage: `url("${image.replace(/"/g, "%22")}")` } : undefined;
+}
+
 export function PortfolioContentEditor({ content, onSaved }: {
   content?: PortfolioContent;
   onSaved: (data: AdminData) => void;
@@ -32,10 +88,6 @@ export function PortfolioContentEditor({ content, onSaved }: {
   const [draft, setDraft] = useState(() => clone(content ?? defaultPortfolioContent()));
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    setDraft(clone(content ?? defaultPortfolioContent()));
-  }, [content]);
 
   const updateProject = <Key extends keyof Project>(index: number, key: Key, value: Project[Key]) => {
     setDraft((current) => ({
@@ -58,6 +110,19 @@ export function PortfolioContentEditor({ content, onSaved }: {
     }));
   };
 
+  const updateGallery = (projectIndex: number, imageIndex: number, value: string) => {
+    const gallery = [...(draft.projects[projectIndex]?.gallery ?? [])];
+    gallery[imageIndex] = value;
+    updateProject(projectIndex, "gallery", gallery);
+  };
+
+  const updateMetric = (projectIndex: number, metricIndex: number, key: keyof ProjectMetric, value: string) => {
+    const metrics = [...(draft.projects[projectIndex]?.metrics ?? [])];
+    const metric = metrics[metricIndex] ?? { value: "", label: "" };
+    metrics[metricIndex] = { ...metric, [key]: value };
+    updateProject(projectIndex, "metrics", metrics);
+  };
+
   const addProject = () => {
     setDraft((current) => ({
       ...current,
@@ -75,6 +140,9 @@ export function PortfolioContentEditor({ content, onSaved }: {
         tags: ["Next.js"],
         accent: "violet",
         image: "",
+        imageAlt: "New project preview",
+        gallery: [],
+        metrics: [],
         github: "https://github.com/uzairali12",
         live: "#",
       }],
@@ -110,7 +178,7 @@ export function PortfolioContentEditor({ content, onSaved }: {
       {message && <p className="content-editor-message" role="status">{message}</p>}
 
       <section className="content-editor-section">
-        <header><div><BriefcaseBusiness /><div><h3>Projects</h3><p>Use a full image URL, or a path such as /projects/project-name.jpg.</p></div></div><button type="button" onClick={addProject}><Plus /> Add project</button></header>
+        <header><div><BriefcaseBusiness /><div><h3>Projects</h3><p>Upload cover and gallery images, then edit every public case-study section from here.</p></div></div><button type="button" onClick={addProject}><Plus /> Add project</button></header>
         <div className="content-editor-list">
           {draft.projects.map((project, index) => (
             <details key={`${project.slug}-${index}`} className="content-editor-card" open={index === 0}>
@@ -118,8 +186,8 @@ export function PortfolioContentEditor({ content, onSaved }: {
                 <span>{project.number}</span><strong>{project.title}</strong><small>{project.year}</small>
               </summary>
               <div className="content-editor-fields">
-                <div className="admin-project-preview" style={project.image ? { backgroundImage: `url("${project.image.replace(/"/g, "%22")}")` } : undefined}>
-                  {!project.image && <><ImageIcon /><span>Add an image URL</span></>}
+                <div className="admin-project-preview" style={previewStyle(project.image ?? "")}>
+                  {!project.image && <><ImageIcon /><span>Upload or paste a cover image</span></>}
                 </div>
                 <div className="admin-form-grid">
                   <Field label="Number" value={project.number} onChange={(value) => updateProject(index, "number", value)} />
@@ -131,10 +199,32 @@ export function PortfolioContentEditor({ content, onSaved }: {
                 </div>
                 <Field label="Project image" value={project.image ?? ""} placeholder="https://… or /projects/image.jpg" onChange={(value) => updateProject(index, "image", value)} />
                 <Field label="Short description" value={project.description} multiline onChange={(value) => updateProject(index, "description", value)} />
+                <AssetField label="Upload a cover image" value={project.image ?? ""} onChange={(value) => updateProject(index, "image", value)} />
+                <Field label="Cover image alt text" value={project.imageAlt ?? ""} placeholder={`${project.title} project preview`} onChange={(value) => updateProject(index, "imageAlt", value)} />
                 <Field label="Overview" value={project.overview} multiline onChange={(value) => updateProject(index, "overview", value)} />
                 <Field label="Challenge" value={project.challenge} multiline onChange={(value) => updateProject(index, "challenge", value)} />
                 <Field label="Solution" value={project.solution} multiline onChange={(value) => updateProject(index, "solution", value)} />
                 <Field label="Outcome" value={project.outcome} multiline onChange={(value) => updateProject(index, "outcome", value)} />
+                <div className="content-editor-subsection">
+                  <div className="content-editor-subsection-heading"><div><h4>Outcome highlights</h4><p>Add measurable results for the public project story.</p></div><button type="button" onClick={() => updateProject(index, "metrics", [...(project.metrics ?? []), { value: "", label: "" }])}><Plus /> Add result</button></div>
+                  {(project.metrics ?? []).map((metric, metricIndex) => (
+                    <div className="admin-metric-row" key={`${metric.label}-${metricIndex}`}>
+                      <Field label="Value" value={metric.value} placeholder="30%" onChange={(value) => updateMetric(index, metricIndex, "value", value)} />
+                      <Field label="Label" value={metric.label} placeholder="Faster task completion" onChange={(value) => updateMetric(index, metricIndex, "label", value)} />
+                      <button className="admin-icon-button" type="button" aria-label="Remove result" onClick={() => updateProject(index, "metrics", (project.metrics ?? []).filter((_, itemIndex) => itemIndex !== metricIndex))}><Trash2 /></button>
+                    </div>
+                  ))}
+                </div>
+                <div className="content-editor-subsection">
+                  <div className="content-editor-subsection-heading"><div><h4>Case-study gallery</h4><p>Images use the same 16:10 ratio in every project view.</p></div><button type="button" onClick={() => updateProject(index, "gallery", [...(project.gallery ?? []), ""])}><Plus /> Add image</button></div>
+                  {(project.gallery ?? []).map((image, imageIndex) => (
+                    <div className="admin-gallery-row" key={`${image}-${imageIndex}`}>
+                      <div className="admin-gallery-preview" style={previewStyle(image)}>{!image && <ImageIcon />}</div>
+                      <AssetField label={`Gallery image ${imageIndex + 1}`} value={image} onChange={(value) => updateGallery(index, imageIndex, value)} />
+                      <button className="admin-icon-button" type="button" aria-label="Remove gallery image" onClick={() => updateProject(index, "gallery", (project.gallery ?? []).filter((_, itemIndex) => itemIndex !== imageIndex))}><Trash2 /></button>
+                    </div>
+                  ))}
+                </div>
                 <Field label="Tags (comma separated)" value={project.tags.join(", ")} onChange={(value) => updateProject(index, "tags", value.split(",").map((tag) => tag.trim()).filter(Boolean))} />
                 <div className="admin-form-grid">
                   <Field label="Live URL" value={project.live} onChange={(value) => updateProject(index, "live", value)} />

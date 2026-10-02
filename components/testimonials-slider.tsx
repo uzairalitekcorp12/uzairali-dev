@@ -14,6 +14,15 @@ export function TestimonialsSlider() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [inViewport, setInViewport] = useState(false);
+
+  useEffect(() => {
+    const element = trackRef.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(([entry]) => setInViewport(entry?.isIntersecting ?? false), { threshold: 0.05 });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   const goTo = useCallback((index: number) => {
     const next = (index + portfolio.testimonials.length) % portfolio.testimonials.length;
@@ -27,10 +36,10 @@ export function TestimonialsSlider() {
   }, []);
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || !inViewport || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = window.setInterval(() => goTo(active + 1), 4800);
     return () => window.clearInterval(timer);
-  }, [active, goTo, paused]);
+  }, [active, goTo, inViewport, paused]);
 
   const syncActive = () => {
     const track = trackRef.current;

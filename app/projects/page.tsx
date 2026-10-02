@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Selected product, interface, and full-stack work by Uzair Ali.",
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default async function ProjectsPage() {
   const content = await getPortfolioContent();

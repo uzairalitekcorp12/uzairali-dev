@@ -72,6 +72,20 @@ ADMIN_SESSION_SECRET
 
 For Vercel, connect an Upstash Redis database and add its REST variables as either `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` or `KV_REST_API_URL` / `KV_REST_API_TOKEN`. Add the three admin variables in Vercel as well. The `/admin` route will then use persistent production storage.
 
+### Project images with Supabase Storage
+
+The Projects area in `/admin` supports a cover image, a gallery, project results, and all case-study copy. The same project data drives the homepage, project archive, full case-study pages, and the interactive monitor.
+
+To enable direct image uploads, create a **public** Supabase Storage bucket (the default bucket name is `portfolio-assets`) and add these Vercel environment variables:
+
+```text
+SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+SUPABASE_STORAGE_BUCKET=portfolio-assets
+```
+
+The service-role key is used only in the server-side `/api/admin/uploads` route; never expose it in browser code. When the bucket is configured, uploaded assets receive a public URL that is saved with the project content. Until then, the editor still accepts a pasted image URL or a local `/projects/...` path.
+
 ## Deploy to Vercel
 
 Push the repository to GitHub, import it in Vercel, and keep the detected framework preset as **Next.js**. Public portfolio pages need no environment variables; the admin/contact workflow needs the variables listed above.

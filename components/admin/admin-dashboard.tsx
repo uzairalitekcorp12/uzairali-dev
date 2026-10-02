@@ -120,7 +120,7 @@ export function AdminDashboard({ initialData = emptyData, initialError = "" }: {
           </div>
         )}
 
-        {tab === "content" && <PortfolioContentEditor content={data.portfolioContent} onSaved={setData} />}
+        {tab === "content" && <PortfolioContentEditor key={JSON.stringify(data.portfolioContent ?? {})} content={data.portfolioContent} onSaved={setData} />}
 
         {tab === "reminders" && (
           <div className="admin-split">

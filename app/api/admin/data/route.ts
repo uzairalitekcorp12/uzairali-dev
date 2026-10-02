@@ -1,7 +1,9 @@
 import { randomUUID } from "node:crypto";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { getAdminData, mutateAdminData } from "@/lib/admin-storage";
-import { normalizePortfolioContent } from "@/lib/portfolio-content";
+import { normalizePortfolioContent } from "@/lib/portfolio-content-shared";
+
+export const runtime = "nodejs";
 
 async function unauthorized() {
   return !(await isAdminAuthenticated());

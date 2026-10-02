@@ -23,7 +23,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
         <div className="project-slide-actions">
           <Link href={`/projects/${project.slug}`}>Case study <ArrowUpRight /></Link>
-          <a href={project.live} target="_blank" rel="noreferrer">Live site <ArrowUpRight /></a>
+          {project.live ? <a href={project.live} target="_blank" rel="noreferrer">Live site <ArrowUpRight /></a> : null}
           <a href={project.github} target="_blank" rel="noreferrer" aria-label={`${project.title} source code`}><Github /></a>
         </div>
       </div>
