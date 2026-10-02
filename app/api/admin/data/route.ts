@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { getAdminData, mutateAdminData } from "@/lib/admin-storage";
+import { normalizePortfolioContent } from "@/lib/portfolio-content";
 
 async function unauthorized() {
   return !(await isAdminAuthenticated());
@@ -45,6 +46,21 @@ export async function PATCH(request: Request) {
     }
   });
   return Response.json(data);
+}
+
+export async function PUT(request: Request) {
+  if (await unauthorized()) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  const body = await request.json() as { portfolioContent?: unknown };
+  const portfolioContent = normalizePortfolioContent(body.portfolioContent);
+  if (!portfolioContent) return Response.json({ error: "Invalid portfolio content." }, { status: 400 });
+  try {
+    const data = await mutateAdminData((current) => {
+      current.portfolioContent = portfolioContent;
+    });
+    return Response.json(data);
+  } catch (error) {
+    return Response.json({ error: error instanceof Error ? error.message : "Unable to save portfolio content." }, { status: 503 });
+  }
 }
 
 export async function DELETE(request: Request) {

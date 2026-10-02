@@ -4,6 +4,9 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, Github } from "lucide-react";
 import { notFound } from "next/navigation";
 import { InnerHeader } from "@/components/inner-header";
 import { portfolio } from "@/data/portfolio";
+import { getPortfolioContent } from "@/lib/portfolio-content";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return portfolio.projects.map((project) => ({ slug: project.slug }));
@@ -11,17 +14,19 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const project = portfolio.projects.find((item) => item.slug === slug);
+  const content = await getPortfolioContent();
+  const project = content.projects.find((item) => item.slug === slug);
   if (!project) return {};
   return { title: project.title, description: project.description };
 }
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const index = portfolio.projects.findIndex((item) => item.slug === slug);
+  const content = await getPortfolioContent();
+  const index = content.projects.findIndex((item) => item.slug === slug);
   if (index < 0) notFound();
-  const project = portfolio.projects[index];
-  const next = portfolio.projects[(index + 1) % portfolio.projects.length];
+  const project = content.projects[index];
+  const next = content.projects[(index + 1) % content.projects.length];
 
   return (
     <>
@@ -37,7 +42,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <a href={project.github} target="_blank" rel="noreferrer"><Github /> Source code</a>
             </div>
           </div>
-          <div className="project-detail-art" aria-hidden="true">
+          <div className="project-detail-art" aria-hidden="true" style={project.image ? { backgroundImage: `linear-gradient(rgba(3, 3, 8, .2), rgba(3, 3, 8, .82)), url("${project.image.replace(/"/g, "%22")}")` } : undefined}>
             <span>{project.number}</span>
             <div><i /><i /><i /><b>{project.title}</b></div>
           </div>

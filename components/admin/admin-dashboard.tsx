@@ -10,14 +10,16 @@ import {
   FileText,
   Inbox,
   LogOut,
+  PanelsTopLeft,
   Plus,
   RefreshCw,
   StickyNote,
   Trash2,
 } from "lucide-react";
+import { PortfolioContentEditor } from "@/components/admin/portfolio-content-editor";
 import type { AdminData } from "@/lib/admin-types";
 
-type Tab = "submissions" | "reminders" | "notes";
+type Tab = "submissions" | "content" | "reminders" | "notes";
 const emptyData: AdminData = { submissions: [], reminders: [], notes: [] };
 
 export function AdminDashboard({ initialData = emptyData, initialError = "" }: { initialData?: AdminData; initialError?: string }) {
@@ -84,10 +86,11 @@ export function AdminDashboard({ initialData = emptyData, initialError = "" }: {
   return (
     <main className="admin-shell">
       <aside className="admin-sidebar">
-        <Link href="/" className="site-logo"><span>UA</span><i /></Link>
+        <Link href="/" className="site-logo"><span>Uzair <b>Ali</b></span><i /></Link>
         <div className="admin-identity"><CircleUserRound /><div><strong>Uzair Ali</strong><span>Private workspace</span></div></div>
         <nav>
           <button className={tab === "submissions" ? "active" : ""} onClick={() => setTab("submissions")}><Inbox /> Inbox <span>{unread}</span></button>
+          <button className={tab === "content" ? "active" : ""} onClick={() => setTab("content")}><PanelsTopLeft /> Portfolio content</button>
           <button className={tab === "reminders" ? "active" : ""} onClick={() => setTab("reminders")}><BellRing /> Reminders <span>{openReminders}</span></button>
           <button className={tab === "notes" ? "active" : ""} onClick={() => setTab("notes")}><StickyNote /> Private notes <span>{data.notes.length}</span></button>
         </nav>
@@ -96,7 +99,7 @@ export function AdminDashboard({ initialData = emptyData, initialError = "" }: {
 
       <section className="admin-workspace">
         <header>
-          <div><p>ADMIN / {tab.toUpperCase()}</p><h1>{tab === "submissions" ? "Contact inbox" : tab === "reminders" ? "Follow-up reminders" : "Private notes"}</h1></div>
+          <div><p>ADMIN / {tab.toUpperCase()}</p><h1>{tab === "submissions" ? "Contact inbox" : tab === "content" ? "Portfolio content" : tab === "reminders" ? "Follow-up reminders" : "Private notes"}</h1></div>
           <button type="button" onClick={() => void load()}><RefreshCw className={loading ? "spin" : ""} /> Refresh</button>
         </header>
 
@@ -116,6 +119,8 @@ export function AdminDashboard({ initialData = emptyData, initialError = "" }: {
             ))}
           </div>
         )}
+
+        {tab === "content" && <PortfolioContentEditor content={data.portfolioContent} onSaved={setData} />}
 
         {tab === "reminders" && (
           <div className="admin-split">

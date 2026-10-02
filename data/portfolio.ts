@@ -91,6 +91,7 @@ export const portfolio = {
         "A fast, polished platform foundation that can grow with new vendors, planning tools, and editorial content.",
       tags: ["Next.js", "Tailwind CSS", "Responsive"],
       accent: "violet",
+      image: "",
       github: "https://github.com/uzairali12/linkleap",
       live: "https://linkleap-app.netlify.app",
     },
@@ -112,6 +113,7 @@ export const portfolio = {
         "A flexible product concept that demonstrates end-to-end product thinking from interface structure to interaction design.",
       tags: ["JavaScript", "Product design", "Local data"],
       accent: "cyan",
+      image: "",
       github: "https://github.com/uzairali12/linkleap",
       live: "https://linkleap-app.netlify.app",
     },
@@ -133,6 +135,7 @@ export const portfolio = {
         "A compact API-driven interface that remains readable across phone, tablet, and desktop screens.",
       tags: ["React", "API", "Data UI"],
       accent: "amber",
+      image: "",
       github: "https://github.com/uzairali12",
       live: "https://github.com/uzairali12",
     },
@@ -154,6 +157,7 @@ export const portfolio = {
         "A capable creative utility that demonstrates browser graphics work and detailed interaction design.",
       tags: ["Canvas API", "JavaScript", "Interaction"],
       accent: "rose",
+      image: "",
       github: "https://github.com/uzairali12",
       live: "https://github.com/uzairali12",
     },
@@ -175,6 +179,7 @@ export const portfolio = {
         "A full-stack learning product foundation with authentication, persistent data, and reporting-ready structures.",
       tags: ["Node.js", "MongoDB", "EJS"],
       accent: "lime",
+      image: "",
       github: "https://github.com/uzairali12",
       live: "https://github.com/uzairali12",
     },
@@ -196,6 +201,7 @@ export const portfolio = {
         "A dependable offline-friendly utility and a practical exploration of local-first interaction patterns.",
       tags: ["React", "Markdown", "LocalStorage"],
       accent: "cyan",
+      image: "",
       github: "https://github.com/uzairali12",
       live: "https://github.com/uzairali12",
     },
@@ -269,4 +275,42 @@ export const portfolio = {
   ],
 } as const;
 
-export type Project = (typeof portfolio.projects)[number];
+export type ProjectAccent = "violet" | "cyan" | "amber" | "rose" | "lime";
+
+export type Project = {
+  number: string;
+  slug: string;
+  title: string;
+  kind: string;
+  year: string;
+  description: string;
+  overview: string;
+  challenge: string;
+  solution: string;
+  outcome: string;
+  tags: readonly string[];
+  accent: ProjectAccent;
+  image?: string;
+  github: string;
+  live: string;
+};
+
+export type EducationItem = {
+  period: string;
+  title: string;
+  place: string;
+  detail: string;
+};
+
+export type ExperienceItem = {
+  period: string;
+  role: string;
+  company: string;
+  description: string;
+};
+
+export type PortfolioContent = {
+  projects: Project[];
+  education: EducationItem[];
+  experience: ExperienceItem[];
+};

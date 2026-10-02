@@ -2,9 +2,9 @@
 
 import type { FormEvent, KeyboardEvent } from "react";
 import { useEffect, useRef, useState } from "react";
-import { portfolio } from "@/data/portfolio";
+import { portfolio, type PortfolioContent } from "@/data/portfolio";
 
-export type ComputerApp = "terminal" | "projects" | "about" | "snake" | "pong";
+export type ComputerApp = "desktop" | "terminal" | "projects" | "about" | "snake" | "pong";
 
 type TerminalLine = {
   text: string;
@@ -21,7 +21,7 @@ const bootLines: TerminalLine[] = [
   { text: "Type `help` or choose a command below." },
 ];
 
-export function PortfolioTerminal({ onOpen }: { onOpen: (app: ComputerApp) => void }) {
+export function PortfolioTerminal({ onOpen, content }: { onOpen: (app: ComputerApp) => void; content: PortfolioContent }) {
   const [lines, setLines] = useState<TerminalLine[]>(bootLines);
   const [command, setCommand] = useState("");
   const [directory, setDirectory] = useState("/home/visitor");
@@ -33,6 +33,11 @@ export function PortfolioTerminal({ onOpen }: { onOpen: (app: ComputerApp) => vo
   useEffect(() => {
     outputRef.current?.scrollTo({ top: outputRef.current.scrollHeight, behavior: "smooth" });
   }, [lines]);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => inputRef.current?.focus({ preventScroll: true }));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   const prompt = `${directory.replace("/home/visitor", "~") || "~"} $`;
 
@@ -68,15 +73,15 @@ export function PortfolioTerminal({ onOpen }: { onOpen: (app: ComputerApp) => vo
     }
     if (lower === "skills") return [{ text: portfolio.skills.join("  ·  ") }];
     if (lower === "education") {
-      return portfolio.education.map((item) => ({ text: `${item.title} — ${item.place}` }));
+      return content.education.map((item) => ({ text: `${item.title} — ${item.place}` }));
     }
     if (lower === "projects") {
       onOpen("projects");
-      return [{ text: `Opening ${portfolio.projects.length} project records …`, tone: "accent" }];
+      return [{ text: `Opening ${content.projects.length} project records …`, tone: "accent" }];
     }
     if (lower === "ls") {
       if (directory.endsWith("/projects")) {
-        return portfolio.projects.map((project) => ({ text: `${project.slug}.project` }));
+        return content.projects.map((project) => ({ text: `${project.slug}.project` }));
       }
       if (directory.endsWith("/games")) return [{ text: "snake.exe    pong.exe" }];
       if (directory.endsWith("/about")) return [{ text: "about.txt    skills.txt    education.txt" }];
@@ -97,7 +102,7 @@ export function PortfolioTerminal({ onOpen }: { onOpen: (app: ComputerApp) => vo
       if (file === "about.txt") return [{ text: portfolio.person.shortBio }];
       if (file === "skills.txt") return [{ text: portfolio.skills.join("  ·  ") }];
       if (file === "education.txt") {
-        return portfolio.education.map((item) => ({ text: `${item.period} | ${item.title} | ${item.place}` }));
+        return content.education.map((item) => ({ text: `${item.period} | ${item.title} | ${item.place}` }));
       }
       return [{ text: `cat: ${file || "missing filename"}: file not found`, tone: "error" }];
     }

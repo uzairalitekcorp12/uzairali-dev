@@ -25,8 +25,12 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteHeader } from "@/components/site-header";
 import { TestimonialsSlider } from "@/components/testimonials-slider";
 import { portfolio } from "@/data/portfolio";
+import { getPortfolioContent } from "@/lib/portfolio-content";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const content = await getPortfolioContent();
   return (
     <>
       <IntroGate />
@@ -67,7 +71,7 @@ export default function HomePage() {
 
           <div className="hero-visual" aria-label="Portrait of Uzair Ali with an interactive black hole visualization">
             <div className="hero-black-hole">
-              <BlackHoleHeroSection />
+              <BlackHoleHeroSection focus={[0.42, 0.5]} steps={260} resolution={0.65} />
             </div>
             <div className="portrait-frame">
               <div className="portrait-image">
@@ -150,7 +154,7 @@ export default function HomePage() {
               <p>A selection of product interfaces, web builds, and creative experiments.</p>
             </div>
 
-            <ProjectSlider />
+            <ProjectSlider items={content.projects} />
             <div className="all-projects-link">
               <Link href="/projects">View the complete project archive <ArrowRight /></Link>
             </div>
@@ -166,7 +170,7 @@ export default function HomePage() {
           <div className="journey-grid">
             <div data-reveal-child>
               <p className="journey-title">Experience</p>
-              {portfolio.experience.map((item) => (
+              {content.experience.map((item) => (
                 <article className="timeline-row" key={`${item.role}-${item.period}`}>
                   <p>{item.period}</p>
                   <div><h3>{item.role}</h3><span>{item.company}</span><p>{item.description}</p></div>
@@ -175,7 +179,7 @@ export default function HomePage() {
             </div>
             <div data-reveal-child>
               <p className="journey-title">Education</p>
-              {portfolio.education.map((item) => (
+              {content.education.map((item) => (
                 <article className="timeline-row" key={`${item.title}-${item.place}`}>
                   <p>{item.period}</p>
                   <div><h3>{item.title}</h3><span>{item.place}</span><p>{item.detail}</p></div>
@@ -192,7 +196,7 @@ export default function HomePage() {
               <h2>This computer is<br /><span>not just decoration.</span></h2>
               <p>Explore my files, type into the terminal, or take a break with Snake and Pong.</p>
             </div>
-            <div data-reveal-child><PortfolioDesktop /></div>
+            <div data-reveal-child><PortfolioDesktop content={content} /></div>
           </div>
         </section>
 
@@ -229,9 +233,20 @@ export default function HomePage() {
       </main>
 
       <footer className="site-footer">
-        <a href="#home" className="site-logo"><span>UA</span><i /></a>
-        <p>Designed and built with care in Karachi.</p>
-        <p>© {new Date().getFullYear()} Uzair Ali</p>
+        <div className="footer-brand">
+          <a href="#home" className="footer-wordmark">Uzair <span>Ali</span><i /></a>
+          <p>Creative developer building thoughtful interfaces, useful products, and memorable digital experiences.</p>
+        </div>
+        <nav aria-label="Footer navigation">
+          {portfolio.navigation.slice(1).map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}
+        </nav>
+        <div className="footer-socials">
+          <a href={portfolio.socials.github} target="_blank" rel="noreferrer"><Github /> GitHub</a>
+          <a href={portfolio.socials.linkedin} target="_blank" rel="noreferrer"><Linkedin /> LinkedIn</a>
+          <a href={portfolio.socials.instagram} target="_blank" rel="noreferrer"><Instagram /> Instagram</a>
+          <a href={portfolio.socials.whatsapp} target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a>
+        </div>
+        <div className="footer-bottom"><p>Designed and built with care in Karachi.</p><p>© {new Date().getFullYear()} Uzair Ali</p></div>
       </footer>
     </>
   );

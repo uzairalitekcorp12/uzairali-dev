@@ -18,7 +18,7 @@ export function SiteHeader() {
   return (
     <header className={`site-header ${scrolled ? "site-header--scrolled" : ""}`}>
       <a href="#home" className="site-logo" aria-label="Uzair Ali — home" onClick={() => setOpen(false)}>
-        <span>UA</span>
+        <span>Uzair <b>Ali</b></span>
         <i />
       </a>
 

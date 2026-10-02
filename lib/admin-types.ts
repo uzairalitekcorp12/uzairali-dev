@@ -27,4 +27,6 @@ export type AdminData = {
   submissions: ContactSubmission[];
   notes: AdminNote[];
   reminders: AdminReminder[];
+  portfolioContent?: PortfolioContent;
 };
+import type { PortfolioContent } from "@/data/portfolio";

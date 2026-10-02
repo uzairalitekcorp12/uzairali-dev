@@ -1,51 +1,49 @@
 "use client";
 
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ProjectCard } from "@/components/project-card";
-import { portfolio } from "@/data/portfolio";
+import type { Project } from "@/data/portfolio";
 
-export function ProjectSlider() {
+export function ProjectSlider({ items }: { items: Project[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
-  const projects = [...portfolio.projects, ...portfolio.projects];
-
-  const move = useCallback((direction: -1 | 1) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const card = track.querySelector<HTMLElement>(".project-slide-card");
-    track.scrollBy({ left: direction * ((card?.offsetWidth ?? 420) + 20), behavior: "smooth" });
-  }, []);
+  const projects = [...items, ...items];
 
   useEffect(() => {
-    if (paused) return;
-    const timer = window.setInterval(() => move(1), 3600);
-    return () => window.clearInterval(timer);
-  }, [move, paused]);
+    if (paused || items.length < 2) return;
+    let frame = 0;
+    let previous = performance.now();
+    const move = (now: number) => {
+      const track = trackRef.current;
+      const delta = Math.min(40, now - previous);
+      previous = now;
+      if (track) track.scrollLeft += delta * 0.028;
+      frame = window.requestAnimationFrame(move);
+    };
+    frame = window.requestAnimationFrame(move);
+    return () => window.cancelAnimationFrame(frame);
+  }, [items.length, paused]);
 
   const keepLooping = () => {
     const track = trackRef.current;
     if (!track) return;
     const halfway = track.scrollWidth / 2;
-    if (track.scrollLeft >= halfway - 2) {
-      track.scrollLeft -= halfway;
-    }
+    if (halfway > 0 && track.scrollLeft >= halfway - 2) track.scrollLeft -= halfway;
   };
 
   return (
     <div
       className="project-slider"
-      onPointerEnter={() => setPaused(true)}
-      onPointerLeave={() => setPaused(false)}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onPointerDown={() => setPaused(true)}
+      onPointerUp={() => setPaused(false)}
+      onPointerCancel={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
       <div className="slider-controls">
-        <p>Drag, swipe, or use the controls</p>
-        <div>
-          <button type="button" onClick={() => move(-1)} aria-label="Previous project"><ArrowLeft /></button>
-          <button type="button" onClick={() => move(1)} aria-label="Next project"><ArrowRight /></button>
-        </div>
+        <p><span /> Moving automatically — hover to pause or swipe on touch</p>
       </div>
       <div ref={trackRef} className="project-slider-track" onScroll={keepLooping}>
         {projects.map((project, index) => (
