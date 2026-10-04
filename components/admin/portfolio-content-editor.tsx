@@ -1,12 +1,43 @@
 "use client";
 
-import { BriefcaseBusiness, FileUp, GraduationCap, Image as ImageIcon, Plus, Save, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { BriefcaseBusiness, CheckCircle2, CloudOff, FileUp, GraduationCap, Image as ImageIcon, Plus, Save, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { AdminData } from "@/lib/admin-types";
 import { defaultPortfolioContent } from "@/lib/portfolio-content-shared";
 import type { EducationItem, ExperienceItem, PortfolioContent, Project, ProjectMetric } from "@/data/portfolio";
 
 const clone = (content: PortfolioContent) => JSON.parse(JSON.stringify(content)) as PortfolioContent;
+
+async function optimizeImageForUpload(file: File) {
+  if (!file.type.startsWith("image/") || typeof createImageBitmap !== "function") return file;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const outputSize = 1024;
+    if (bitmap.width === outputSize && bitmap.height === outputSize) {
+      bitmap.close();
+      return file;
+    }
+    const sourceSize = Math.min(bitmap.width, bitmap.height);
+    const sourceX = Math.round((bitmap.width - sourceSize) / 2);
+    const sourceY = Math.round((bitmap.height - sourceSize) / 2);
+    const canvas = document.createElement("canvas");
+    canvas.width = outputSize;
+    canvas.height = outputSize;
+    const context = canvas.getContext("2d");
+    if (!context) {
+      bitmap.close();
+      return file;
+    }
+    context.drawImage(bitmap, sourceX, sourceY, sourceSize, sourceSize, 0, 0, outputSize, outputSize);
+    bitmap.close();
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/webp", 0.86));
+    if (!blob) return file;
+    const name = file.name.replace(/\.[^.]+$/, "") || "portfolio-image";
+    return new File([blob], `${name}.webp`, { type: "image/webp", lastModified: Date.now() });
+  } catch {
+    return file;
+  }
+}
 
 function Field({ label, value, onChange, multiline = false, placeholder = "" }: {
   label: string;
@@ -25,11 +56,12 @@ function Field({ label, value, onChange, multiline = false, placeholder = "" }: 
   );
 }
 
-function AssetField({ label, value, onChange, placeholder = "https://… or /projects/image.jpg" }: {
+function AssetField({ label, value, onChange, placeholder = "Uploaded image URL or /projects/image.jpg", usage }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  usage?: string;
 }) {
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
@@ -38,14 +70,19 @@ function AssetField({ label, value, onChange, placeholder = "https://… or /pro
     setUploading(true);
     setMessage("");
     try {
+      const optimizedFile = await optimizeImageForUpload(file);
       const body = new FormData();
-      body.set("file", file);
+      body.set("file", optimizedFile);
       body.set("folder", "projects");
       const response = await fetch("/api/admin/uploads", { method: "POST", body });
-      const payload = await response.json() as { url?: string; error?: string };
+      const payload = await response.json() as { url?: string; provider?: "local" | "supabase"; error?: string };
       if (!response.ok || !payload.url) throw new Error(payload.error ?? "Unable to upload image.");
       onChange(payload.url);
-      setMessage("Uploaded to Supabase Storage. Save all changes to publish it.");
+      const saved = optimizedFile.size < file.size
+        ? ` Compressed from ${(file.size / 1024 / 1024).toFixed(1)} MB to ${(optimizedFile.size / 1024 / 1024).toFixed(1)} MB.`
+        : "";
+      const destination = payload.provider === "local" ? "local storage" : "Supabase Storage";
+      setMessage(`Uploaded to ${destination} at 1,024 × 1,024 px.${saved} Save all changes to publish it.`);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to upload image.");
     } finally {
@@ -57,7 +94,7 @@ function AssetField({ label, value, onChange, placeholder = "https://… or /pro
     <div className="admin-asset-field">
       <Field label={label} value={value} placeholder={placeholder} onChange={onChange} />
       <div className="admin-asset-actions">
-        <label className="admin-upload-button">
+        <label className={`admin-upload-button${uploading ? " is-uploading" : ""}`}>
           <FileUp /> {uploading ? "Uploading…" : "Upload image"}
           <input
             type="file"
@@ -70,8 +107,10 @@ function AssetField({ label, value, onChange, placeholder = "https://… or /pro
             }}
           />
         </label>
-        <small>Uses Supabase Storage after its environment variables are configured.</small>
+        {value ? <button className="admin-asset-clear" type="button" onClick={() => onChange("")}><Trash2 /> Remove image</button> : null}
+        <small>Use a 1,024 × 1,024 px square image. Other sizes are center-cropped and resized automatically.</small>
       </div>
+      {usage ? <p className="admin-asset-usage"><CheckCircle2 /> {usage}</p> : null}
       {message && <p className="admin-asset-message" role="status">{message}</p>}
     </div>
   );
@@ -88,6 +127,25 @@ export function PortfolioContentEditor({ content, onSaved }: {
   const [draft, setDraft] = useState(() => clone(content ?? defaultPortfolioContent()));
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [storageStatus, setStorageStatus] = useState<"checking" | "local" | "supabase" | "missing">("checking");
+  const [storageBucket, setStorageBucket] = useState("portfolio-assets");
+  const [storageError, setStorageError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/admin/uploads", { cache: "no-store" })
+      .then(async (response) => {
+        const payload = await response.json() as { configured?: boolean; provider?: "local" | "supabase" | "missing"; bucket?: string; error?: string };
+        if (!active) return;
+        setStorageStatus(response.ok && payload.configured && payload.provider ? payload.provider : "missing");
+        if (payload.bucket) setStorageBucket(payload.bucket);
+        setStorageError(payload.error ?? "");
+      })
+      .catch(() => {
+        if (active) setStorageStatus("missing");
+      });
+    return () => { active = false; };
+  }, []);
 
   const updateProject = <Key extends keyof Project>(index: number, key: Key, value: Project[Key]) => {
     setDraft((current) => ({
@@ -127,8 +185,8 @@ export function PortfolioContentEditor({ content, onSaved }: {
     setDraft((current) => ({
       ...current,
       projects: [...current.projects, {
-        number: String(current.projects.length + 1).padStart(2, "0"),
-        slug: `new-project-${current.projects.length + 1}`,
+        number: String(Math.max(0, ...current.projects.map((project) => Number.parseInt(project.number, 10) || 0)) + 1).padStart(2, "0"),
+        slug: `new-project-${Date.now()}`,
         title: "New project",
         kind: "Project type",
         year: new Date().getFullYear().toString(),
@@ -153,6 +211,9 @@ export function PortfolioContentEditor({ content, onSaved }: {
     setSaving(true);
     setMessage("");
     try {
+      const normalizedSlugs = draft.projects.map((project) => project.slug.trim().toLowerCase());
+      if (normalizedSlugs.some((slug) => !slug)) throw new Error("Every project needs a slug before it can be published.");
+      if (new Set(normalizedSlugs).size !== normalizedSlugs.length) throw new Error("Project slugs must be unique.");
       const response = await fetch("/api/admin/data", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -175,10 +236,21 @@ export function PortfolioContentEditor({ content, onSaved }: {
         <div><p>CONTENT MANAGER</p><h2>Projects, experience & education</h2></div>
         <button type="button" onClick={() => void save()} disabled={saving}><Save /> {saving ? "Saving…" : "Save all changes"}</button>
       </div>
+      <div className={`admin-storage-status admin-storage-status--${storageStatus === "local" || storageStatus === "supabase" ? "connected" : storageStatus}`} role="status">
+        {storageStatus === "local" || storageStatus === "supabase" ? <CheckCircle2 /> : <CloudOff />}
+        <div>
+          <strong>{storageStatus === "checking" ? "Checking storage…" : storageStatus === "supabase" ? "Supabase connected" : storageStatus === "local" ? "Local storage ready" : "Storage needs configuration"}</strong>
+          <span>{storageStatus === "supabase"
+            ? `Images use “${storageBucket}”; admin data is kept in a private bucket.`
+            : storageStatus === "local"
+              ? "Content and uploads stay on this machine during local development."
+              : storageError || "Connect Supabase to the deployment and provide its server secret."}</span>
+        </div>
+      </div>
       {message && <p className="content-editor-message" role="status">{message}</p>}
 
       <section className="content-editor-section">
-        <header><div><BriefcaseBusiness /><div><h3>Projects</h3><p>Upload cover and gallery images, then edit every public case-study section from here.</p></div></div><button type="button" onClick={addProject}><Plus /> Add project</button></header>
+        <header><div><BriefcaseBusiness /><div><h3>Projects <small>{draft.projects.length}</small></h3><p>Upload cover and gallery images, then edit every public case-study section from here.</p></div></div><button type="button" onClick={addProject}><Plus /> Add project</button></header>
         <div className="content-editor-list">
           {draft.projects.map((project, index) => (
             <details key={`${project.slug}-${index}`} className="content-editor-card" open={index === 0}>
@@ -197,9 +269,13 @@ export function PortfolioContentEditor({ content, onSaved }: {
                   <Field label="Project type" value={project.kind} onChange={(value) => updateProject(index, "kind", value)} />
                   <label><span>Accent</span><select value={project.accent} onChange={(event) => updateProject(index, "accent", event.target.value as Project["accent"])}><option>violet</option><option>cyan</option><option>amber</option><option>rose</option><option>lime</option></select></label>
                 </div>
-                <Field label="Project image" value={project.image ?? ""} placeholder="https://… or /projects/image.jpg" onChange={(value) => updateProject(index, "image", value)} />
                 <Field label="Short description" value={project.description} multiline onChange={(value) => updateProject(index, "description", value)} />
-                <AssetField label="Upload a cover image" value={project.image ?? ""} onChange={(value) => updateProject(index, "image", value)} />
+                <AssetField
+                  label="Project cover image"
+                  value={project.image ?? ""}
+                  usage="This single cover is reused on the home slider, project archive card, interactive desktop, and case-study hero."
+                  onChange={(value) => updateProject(index, "image", value)}
+                />
                 <Field label="Cover image alt text" value={project.imageAlt ?? ""} placeholder={`${project.title} project preview`} onChange={(value) => updateProject(index, "imageAlt", value)} />
                 <Field label="Overview" value={project.overview} multiline onChange={(value) => updateProject(index, "overview", value)} />
                 <Field label="Challenge" value={project.challenge} multiline onChange={(value) => updateProject(index, "challenge", value)} />
@@ -216,7 +292,7 @@ export function PortfolioContentEditor({ content, onSaved }: {
                   ))}
                 </div>
                 <div className="content-editor-subsection">
-                  <div className="content-editor-subsection-heading"><div><h4>Case-study gallery</h4><p>Images use the same 16:10 ratio in every project view.</p></div><button type="button" onClick={() => updateProject(index, "gallery", [...(project.gallery ?? []), ""])}><Plus /> Add image</button></div>
+                  <div className="content-editor-subsection-heading"><div><h4>Case-study gallery</h4><p>Use 1,024 × 1,024 px images for a consistent square visual system.</p></div><button type="button" onClick={() => updateProject(index, "gallery", [...(project.gallery ?? []), ""])}><Plus /> Add image</button></div>
                   {(project.gallery ?? []).map((image, imageIndex) => (
                     <div className="admin-gallery-row" key={`${image}-${imageIndex}`}>
                       <div className="admin-gallery-preview" style={previewStyle(image)}>{!image && <ImageIcon />}</div>
@@ -238,7 +314,7 @@ export function PortfolioContentEditor({ content, onSaved }: {
       </section>
 
       <section className="content-editor-section">
-        <header><div><BriefcaseBusiness /><div><h3>Experience</h3><p>Add or update professional milestones.</p></div></div><button type="button" onClick={() => setDraft((current) => ({ ...current, experience: [...current.experience, { period: "Present", role: "New role", company: "Company", description: "Role description." }] }))}><Plus /> Add experience</button></header>
+        <header><div><BriefcaseBusiness /><div><h3>Experience <small>{draft.experience.length}</small></h3><p>Add, edit, or remove professional milestones shown on the public journey.</p></div></div><button type="button" onClick={() => setDraft((current) => ({ ...current, experience: [...current.experience, { period: "Present", role: "New role", company: "Company", description: "Role description." }] }))}><Plus /> Add experience</button></header>
         <div className="content-simple-grid">
           {draft.experience.map((item, index) => (
             <article key={index}>
@@ -253,7 +329,7 @@ export function PortfolioContentEditor({ content, onSaved }: {
       </section>
 
       <section className="content-editor-section">
-        <header><div><GraduationCap /><div><h3>Education</h3><p>Keep qualifications and study details current.</p></div></div><button type="button" onClick={() => setDraft((current) => ({ ...current, education: [...current.education, { period: "Present", title: "New qualification", place: "Institution", detail: "Education details." }] }))}><Plus /> Add education</button></header>
+        <header><div><GraduationCap /><div><h3>Education <small>{draft.education.length}</small></h3><p>Add, edit, or remove qualifications shown on the public journey.</p></div></div><button type="button" onClick={() => setDraft((current) => ({ ...current, education: [...current.education, { period: "Present", title: "New qualification", place: "Institution", detail: "Education details." }] }))}><Plus /> Add education</button></header>
         <div className="content-simple-grid">
           {draft.education.map((item, index) => (
             <article key={index}>

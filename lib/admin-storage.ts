@@ -2,33 +2,15 @@ import "server-only";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { AdminData } from "@/lib/admin-types";
+import {
+  ensureSupabaseBucket,
+  getSupabaseConfigurationIssue,
+  getSupabaseServerConfiguration,
+  supabaseServerHeaders,
+} from "@/lib/supabase-server";
 
-const STORAGE_KEY = "uzair-portfolio:admin-data";
+const SUPABASE_STATE_OBJECT = "admin-state.json";
 const emptyData = (): AdminData => ({ submissions: [], notes: [], reminders: [] });
-
-function redisConfiguration() {
-  const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
-  return url && token ? { url: url.replace(/\/$/, ""), token } : null;
-}
-
-async function redisCommand(command: string[]) {
-  const configuration = redisConfiguration();
-  if (!configuration) throw new Error("Redis is not configured");
-  const response = await fetch(configuration.url, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${configuration.token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(command),
-    cache: "no-store",
-  });
-  if (!response.ok) throw new Error(`Storage request failed (${response.status})`);
-  const payload = await response.json() as { result?: unknown; error?: string };
-  if (payload.error) throw new Error(payload.error);
-  return payload.result;
-}
 
 async function readLocal(): Promise<AdminData> {
   const directory = join(process.cwd(), ".data");
@@ -49,25 +31,84 @@ async function writeLocal(data: AdminData) {
   await writeFile(join(directory, "admin-store.json"), JSON.stringify(data, null, 2), "utf8");
 }
 
-export async function getAdminData(): Promise<AdminData> {
-  if (redisConfiguration()) {
-    const value = await redisCommand(["GET", STORAGE_KEY]);
-    if (!value) return emptyData();
-    return typeof value === "string" ? JSON.parse(value) as AdminData : value as AdminData;
+async function readSupabase(): Promise<AdminData> {
+  const configuration = getSupabaseServerConfiguration();
+  if (!configuration) throw new Error(getSupabaseConfigurationIssue());
+
+  await ensureSupabaseBucket(configuration, configuration.privateBucket, {
+    isPublic: false,
+    fileSizeLimit: 2 * 1024 * 1024,
+    allowedMimeTypes: ["application/json"],
+  });
+
+  const listing = await fetch(`${configuration.url}/storage/v1/object/list/${encodeURIComponent(configuration.privateBucket)}`, {
+    method: "POST",
+    headers: supabaseServerHeaders(configuration, { "Content-Type": "application/json" }),
+    body: JSON.stringify({ prefix: "", search: SUPABASE_STATE_OBJECT, limit: 1 }),
+    cache: "no-store",
+  });
+  if (!listing.ok) {
+    const detail = (await listing.text()).slice(0, 240);
+    throw new Error(`Supabase data check failed (${listing.status})${detail ? `: ${detail}` : "."}`);
   }
+  const files = await listing.json() as Array<{ name?: string }>;
+  if (!files.some((file) => file.name === SUPABASE_STATE_OBJECT)) return emptyData();
+
+  const response = await fetch(
+    `${configuration.url}/storage/v1/object/${encodeURIComponent(configuration.privateBucket)}/${SUPABASE_STATE_OBJECT}`,
+    { headers: supabaseServerHeaders(configuration), cache: "no-store" },
+  );
+  if (!response.ok) {
+    const detail = (await response.text()).slice(0, 240);
+    throw new Error(`Supabase data read failed (${response.status})${detail ? `: ${detail}` : "."}`);
+  }
+  return await response.json() as AdminData;
+}
+
+async function writeSupabase(data: AdminData) {
+  const configuration = getSupabaseServerConfiguration();
+  if (!configuration) throw new Error(getSupabaseConfigurationIssue());
+
+  await ensureSupabaseBucket(configuration, configuration.privateBucket, {
+    isPublic: false,
+    fileSizeLimit: 2 * 1024 * 1024,
+    allowedMimeTypes: ["application/json"],
+  });
+
+  const response = await fetch(
+    `${configuration.url}/storage/v1/object/${encodeURIComponent(configuration.privateBucket)}/${SUPABASE_STATE_OBJECT}`,
+    {
+      method: "POST",
+      headers: supabaseServerHeaders(configuration, {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+        "x-upsert": "true",
+      }),
+      body: JSON.stringify(data),
+      cache: "no-store",
+    },
+  );
+  if (!response.ok) {
+    const detail = (await response.text()).slice(0, 240);
+    throw new Error(`Supabase data write failed (${response.status})${detail ? `: ${detail}` : "."}`);
+  }
+}
+
+export async function getAdminData(): Promise<AdminData> {
+  if (getSupabaseServerConfiguration()) return readSupabase();
   if (process.env.VERCEL) {
-    throw new Error("Persistent storage is not configured for this deployment.");
+    throw new Error(getSupabaseConfigurationIssue());
   }
   return readLocal();
 }
 
 export async function saveAdminData(data: AdminData) {
-  if (redisConfiguration()) {
-    await redisCommand(["SET", STORAGE_KEY, JSON.stringify(data)]);
+  if (getSupabaseServerConfiguration()) {
+    await writeSupabase(data);
     return;
   }
   if (process.env.VERCEL) {
-    throw new Error("Persistent storage is not configured for this deployment.");
+    throw new Error(getSupabaseConfigurationIssue());
   }
   await writeLocal(data);
 }

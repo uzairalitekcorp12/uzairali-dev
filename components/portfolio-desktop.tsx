@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -23,10 +24,21 @@ import {
   UserRound,
 } from "lucide-react";
 import { useState } from "react";
-import { PongGame } from "@/components/games/pong-game";
-import { SnakeGame } from "@/components/games/snake-game";
-import { PortfolioTerminal, type ComputerApp } from "@/components/portfolio-terminal";
+import type { ComputerApp } from "@/components/portfolio-terminal";
 import { portfolio, type PortfolioContent, type Project } from "@/data/portfolio";
+
+const PortfolioTerminal = dynamic(
+  () => import("@/components/portfolio-terminal").then((module) => module.PortfolioTerminal),
+  { loading: () => <div className="mac-app-loading">Opening terminal…</div> },
+);
+const SnakeGame = dynamic(
+  () => import("@/components/games/snake-game").then((module) => module.SnakeGame),
+  { loading: () => <div className="mac-app-loading">Loading Snake…</div> },
+);
+const PongGame = dynamic(
+  () => import("@/components/games/pong-game").then((module) => module.PongGame),
+  { loading: () => <div className="mac-app-loading">Loading Pong…</div> },
+);
 
 const navItems: Array<{ id: ComputerApp; label: string; icon: typeof TerminalSquare }> = [
   { id: "desktop", label: "Home", icon: Home },

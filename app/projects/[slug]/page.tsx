@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Github } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -28,6 +29,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const project = content.projects[index];
   const next = content.projects[(index + 1) % content.projects.length];
   const gallery = [project.image, ...(project.gallery ?? [])].filter(Boolean) as string[];
+  const hasLiveSite = Boolean(project.live && project.live !== "#");
+  const hasSource = Boolean(project.github && project.github !== "#");
 
   return (
     <>
@@ -39,11 +42,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <h1>{project.title}</h1>
             <p>{project.overview}</p>
             <div className="project-detail-actions">
-              {project.live ? <a href={project.live} target="_blank" rel="noreferrer">Open live site <ArrowUpRight /></a> : null}
-              <a href={project.github} target="_blank" rel="noreferrer"><Github /> Source code</a>
+              {hasLiveSite ? <a href={project.live} target="_blank" rel="noreferrer">Open live site <ArrowUpRight /></a> : null}
+              {hasSource ? <a href={project.github} target="_blank" rel="noreferrer"><Github /> Source code</a> : null}
             </div>
           </div>
-          <div className="project-detail-art" aria-hidden="true" style={project.image ? { backgroundImage: `linear-gradient(rgba(3, 3, 8, .2), rgba(3, 3, 8, .82)), url("${project.image.replace(/"/g, "%22")}")` } : undefined}>
+          <div className="project-detail-art">
+            {project.image ? (
+              <Image
+                src={project.image}
+                alt={project.imageAlt ?? `${project.title} project preview`}
+                fill
+                sizes="(max-width: 800px) 92vw, 52vw"
+                priority
+              />
+            ) : null}
             <span>{project.number}</span>
             <div><i /><i /><i /><b>{project.title}</b></div>
           </div>
@@ -68,7 +80,16 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
         {gallery.length > 1 ? <section className="project-detail-gallery">
           <header><p className="section-index">VISUAL NOTES</p><h2>Built with<br /><span>the full picture in mind.</span></h2></header>
-          <div>{gallery.slice(1).map((image, imageIndex) => <div key={image} className="project-detail-gallery-image" style={{ backgroundImage: `url("${image.replace(/"/g, "%22")}")` }} aria-label={`${project.title} visual ${imageIndex + 1}`} role="img" />)}</div>
+          <div>{gallery.slice(1).map((image, imageIndex) => (
+            <div key={image} className="project-detail-gallery-image">
+              <Image
+                src={image}
+                alt={`${project.title} visual ${imageIndex + 1}`}
+                fill
+                sizes="(max-width: 800px) 92vw, 52vw"
+              />
+            </div>
+          ))}</div>
         </section> : null}
 
         <nav className="next-project" aria-label="Project navigation">

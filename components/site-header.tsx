@@ -10,7 +10,9 @@ export function SiteHeader() {
   const [activeHref, setActiveHref] = useState("#home");
 
   useEffect(() => {
-    const onScroll = () => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
       setScrolled(window.scrollY > 24);
       let current: string = portfolio.navigation[0]?.href ?? "#home";
       for (const item of portfolio.navigation) {
@@ -19,12 +21,16 @@ export function SiteHeader() {
       }
       setActiveHref(current);
     };
-    onScroll();
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("hashchange", onScroll);
+    window.addEventListener("hashchange", update);
     return () => {
+      window.cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("hashchange", onScroll);
+      window.removeEventListener("hashchange", update);
     };
   }, []);
 

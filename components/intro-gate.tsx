@@ -33,7 +33,12 @@ export function IntroGate() {
   useEffect(() => {
     document.body.dataset.intro = "open";
     const targets = shellRef.current?.querySelectorAll("[data-intro-item]");
-    if (targets?.length) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (targets?.length && reduceMotion) {
+      targets.forEach((target) => {
+        (target as HTMLElement).style.opacity = "1";
+      });
+    } else if (targets?.length) {
       animate(targets, {
         opacity: 1,
         y: { from: 24 },
@@ -60,11 +65,11 @@ export function IntroGate() {
   if (!visible) return null;
 
   return (
-    <div ref={shellRef} className="intro-gate" role="dialog" aria-label="Portfolio introduction">
+    <div ref={shellRef} className="intro-gate" role="dialog" aria-modal="true" aria-label="Portfolio introduction">
       <div className="intro-canvas"><SpiralAnimation /></div>
       <div className="intro-topline" data-intro-item>
         <span>UZAIR ALI</span>
-        <span className="intro-status">SELECTED WORK</span>
+        <span className="intro-status"><i /> PORTFOLIO / 2026</span>
       </div>
 
       <div className="intro-copy">

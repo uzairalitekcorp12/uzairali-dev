@@ -68,6 +68,13 @@ export default async function HomePage() {
               <span><MapPin /> {portfolio.person.location}</span>
               <span><Code2 /> Building for the modern web</span>
             </div>
+
+            <div className="hero-proof" aria-label="Portfolio highlights">
+              <span>01</span>
+              <p><strong>{String(content.projects.length).padStart(2, "0")} case studies</strong> spanning product design, frontend systems, and full-stack delivery.</p>
+              <span>02</span>
+              <p><strong>Built end to end</strong> with strategy, interaction, engineering, and launch quality considered together.</p>
+            </div>
           </div>
 
           <div className="hero-visual" aria-label="Portrait of Uzair Ali">

@@ -1,6 +1,5 @@
 "use client";
 
-import { animate, stagger } from "animejs";
 import { useEffect } from "react";
 
 export function ScrollReveal() {
@@ -8,9 +7,17 @@ export function ScrollReveal() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const elements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
 
+    document.documentElement.classList.add("reveal-ready");
+
+    elements.forEach((element) => {
+      element.querySelectorAll<HTMLElement>("[data-reveal-child]").forEach((child, index) => {
+        child.style.setProperty("--reveal-delay", `${Math.min(index * 70, 350)}ms`);
+      });
+    });
+
     if (reduceMotion) {
       elements.forEach((element) => element.classList.add("is-revealed"));
-      return;
+      return () => document.documentElement.classList.remove("reveal-ready");
     }
 
     const observer = new IntersectionObserver(
@@ -19,16 +26,6 @@ export function ScrollReveal() {
           if (!entry.isIntersecting) return;
           const element = entry.target as HTMLElement;
           element.classList.add("is-revealed");
-          const children = element.querySelectorAll("[data-reveal-child]");
-          if (children.length) {
-            animate(children, {
-              opacity: { from: 0 },
-              y: { from: 30 },
-              duration: 850,
-              delay: stagger(85),
-              ease: "outExpo",
-            });
-          }
           observer.unobserve(element);
         });
       },
@@ -36,7 +33,10 @@ export function ScrollReveal() {
     );
 
     elements.forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      document.documentElement.classList.remove("reveal-ready");
+    };
   }, []);
 
   return null;

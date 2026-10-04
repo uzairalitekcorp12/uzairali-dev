@@ -52,43 +52,38 @@ app/projects/                             Project archive and slug pages
 app/admin/                                Private admin workspace
 app/api/contact/route.ts                  Contact-form endpoint
 app/globals.css                           Visual system and responsive layout
-components/ui/spiral-animation.tsx        Opening particle experience
-components/ui/black-hole-hero-section.tsx Hero WebGL black hole
-components/portfolio-desktop.tsx          3D CRT interface
+components/portfolio-desktop.tsx          Lazy-loaded interactive studio
 components/portfolio-terminal.tsx         Command terminal
 components/games/                         Snake and Pong
 data/portfolio.ts                         Editable portfolio content
+lib/supabase-server.ts                    Server-only Supabase configuration
 ```
 
-## Admin and contact storage
+## Local admin setup
 
-Local development stores submissions, reminders, and notes in the ignored `.data/` directory. Create `.env.development.local` from `.env.example` and set:
+Create `.env.local` with only the local admin credentials:
 
-```text
-ADMIN_EMAIL
-ADMIN_PASSWORD
-ADMIN_SESSION_SECRET
+```dotenv
+ADMIN_EMAIL=you@example.com
+ADMIN_PASSWORD=use-a-long-unique-password
+ADMIN_SESSION_SECRET=generate-at-least-32-random-characters
 ```
 
-For Vercel, connect an Upstash Redis database and add its REST variables as either `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` or `KV_REST_API_URL` / `KV_REST_API_TOKEN`. Add the three admin variables in Vercel as well. The `/admin` route will then use persistent production storage.
+Next.js loads `.env.local` automatically. Local content is saved in the ignored `.data/admin-store.json` file, and local uploads are written under the ignored `.data/uploads/` directory. No local Supabase or Redis variables are required.
 
-### Project images with Supabase Storage
+Then run:
 
-The Projects area in `/admin` supports a cover image, a gallery, project results, and all case-study copy. The same project data drives the homepage, project archive, full case-study pages, and the interactive monitor.
-
-To enable direct image uploads, create a **public** Supabase Storage bucket (the default bucket name is `portfolio-assets`) and add these Vercel environment variables:
-
-```text
-SUPABASE_URL
-SUPABASE_SERVICE_ROLE_KEY
-SUPABASE_STORAGE_BUCKET=portfolio-assets
+```bash
+npm run dev
 ```
 
-The service-role key is used only in the server-side `/api/admin/uploads` route; never expose it in browser code. When the bucket is configured, uploaded assets receive a public URL that is saved with the project content. Until then, the editor still accepts a pasted image URL or a local `/projects/...` path.
+Open `/admin` and sign in. Images are resized in the browser when useful, uploaded through the authenticated server endpoint, and rendered with responsive Next.js images.
 
 ## Deploy to Vercel
 
-Push the repository to GitHub, import it in Vercel, and keep the detected framework preset as **Next.js**. Public portfolio pages need no environment variables; the admin/contact workflow needs the variables listed above.
+Push the repository to GitHub, import it in Vercel, and keep the detected framework preset as **Next.js**. Configure the three admin variables in the project settings, then connect Supabase so Vercel injects `SUPABASE_URL` and `SUPABASE_SECRET_KEY` (or the legacy `SUPABASE_SERVICE_ROLE_KEY`) automatically. `SUPABASE_STORAGE_BUCKET` is optional and defaults to `portfolio-assets`.
+
+The first authenticated request creates a public media bucket and a separate private admin-data bucket automatically. There is no database migration or SQL schema to run. Never put a publishable `sb_publishable_...` key in `SUPABASE_SECRET_KEY`; server writes require an `sb_secret_...` key. Do not commit `.env.local`.
 
 You can also deploy from the command line:
 

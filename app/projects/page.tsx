@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 import { InnerHeader } from "@/components/inner-header";
 import { ProjectCard } from "@/components/project-card";
 import { getPortfolioContent } from "@/lib/portfolio-content";
@@ -24,7 +24,7 @@ export default async function ProjectsPage() {
           <div>
             <p>
               Product interfaces, frontend builds, and full-stack experiments. Every project lives in one
-              data file, so adding the next fifteen is straightforward.
+              connected content system, from the archive card to its full visual case study.
             </p>
             <Link href="/#work"><ArrowLeft /> Back to featured work</Link>
           </div>
@@ -32,9 +32,10 @@ export default async function ProjectsPage() {
         <section className="projects-archive-grid" aria-label="All projects">
           {content.projects.map((project) => <ProjectCard key={project.slug} project={project} />)}
           <article className="project-add-card">
-            <Plus />
-            <h2>Next project</h2>
-            <p>Add one object to <code>data/portfolio.ts</code> and it appears here, in the slider, and in its own case study.</p>
+            <Sparkles />
+            <p className="section-index">A LIVING ARCHIVE</p>
+            <h2>More work is always taking shape.</h2>
+            <p>New CMS entries automatically join this archive, the home-page rail, and their own case-study page.</p>
           </article>
         </section>
       </main>
