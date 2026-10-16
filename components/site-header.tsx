@@ -24,13 +24,24 @@ export function SiteHeader() {
     const onScroll = () => {
       if (!frame) frame = window.requestAnimationFrame(update);
     };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    const onResize = () => {
+      if (window.innerWidth > 800) setOpen(false);
+      onScroll();
+    };
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("hashchange", update);
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", onResize, { passive: true });
     return () => {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("hashchange", update);
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 
@@ -41,12 +52,13 @@ export function SiteHeader() {
         <Heart className="site-logo-heart" aria-hidden="true" fill="currentColor" />
       </a>
 
-      <nav className={`site-nav ${open ? "site-nav--open" : ""}`} aria-label="Primary navigation">
+      <nav id="primary-navigation" className={`site-nav ${open ? "site-nav--open" : ""}`} aria-label="Primary navigation">
         {portfolio.navigation.map((item) => (
           <a
             key={item.href}
             href={item.href}
             className={activeHref === item.href ? "is-active" : ""}
+            aria-current={activeHref === item.href ? "location" : undefined}
             onClick={() => {
               setActiveHref(item.href);
               setOpen(false);
@@ -58,7 +70,7 @@ export function SiteHeader() {
       </nav>
 
       <a className="header-cta" href="#contact">
-        Get started <ArrowUpRight />
+        Let&apos;s talk <ArrowUpRight />
       </a>
 
       <button
@@ -66,6 +78,7 @@ export function SiteHeader() {
         type="button"
         aria-label={open ? "Close navigation" : "Open navigation"}
         aria-expanded={open}
+        aria-controls="primary-navigation"
         onClick={() => setOpen((value) => !value)}
       >
         {open ? <X /> : <Menu />}

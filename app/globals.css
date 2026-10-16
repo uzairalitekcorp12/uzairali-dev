@@ -5848,3 +5848,256 @@ html.reveal-ready [data-reveal].is-revealed [data-reveal-child] {
   .project-detail-art:hover > img,
   .project-detail-gallery-image:hover img { transform: none; }
 }
+
+/* Compact, static project layout — intentionally the only visual override. */
+.project-slider--static {
+  margin-top: clamp(2.5rem, 5vw, 4.25rem);
+}
+
+.project-compact-grid,
+.projects-archive-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+  overflow: visible;
+}
+
+.project-compact-grid > div,
+.projects-archive-grid > .project-slide-card {
+  min-width: 0;
+}
+
+.project-compact-grid .project-slide-card,
+.projects-archive-grid .project-slide-card {
+  display: grid;
+  min-width: 0;
+  min-height: 21rem;
+  grid-template-rows: 8.5rem 1fr;
+  border-radius: 1rem;
+  scroll-snap-align: none;
+}
+
+.project-compact-grid .project-slide-card:hover,
+.projects-archive-grid .project-slide-card:hover {
+  transform: translateY(-0.3rem);
+}
+
+.project-compact-grid .project-slide-art,
+.projects-archive-grid .project-slide-art {
+  min-height: 0;
+  aspect-ratio: auto;
+}
+
+.project-compact-grid .project-slide-window,
+.projects-archive-grid .project-slide-window {
+  width: 56%;
+  max-width: 8.5rem;
+  padding: 0.48rem;
+  border-radius: 0.55rem;
+  box-shadow: 0 1.25rem 2rem rgba(0, 0, 0, 0.38);
+}
+
+.project-compact-grid .project-slide-window::after,
+.projects-archive-grid .project-slide-window::after {
+  inset: 1.45rem 0.5rem 0.5rem;
+}
+
+.project-compact-grid .project-slide-window i,
+.projects-archive-grid .project-slide-window i {
+  width: 0.25rem;
+  height: 0.25rem;
+  margin-right: 0.16rem;
+}
+
+.project-compact-grid .project-slide-window b,
+.projects-archive-grid .project-slide-window b {
+  right: 0.8rem;
+  bottom: 0.62rem;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+}
+
+.project-compact-grid .project-slide-number,
+.projects-archive-grid .project-slide-number {
+  top: 0.7rem;
+  left: 0.72rem;
+  width: 1.65rem;
+  height: 1.65rem;
+  font-size: 0.48rem;
+}
+
+.project-compact-grid .project-slide-media-meta,
+.projects-archive-grid .project-slide-media-meta {
+  right: 0.65rem;
+  bottom: 0.55rem;
+  left: 0.65rem;
+}
+
+.project-compact-grid .project-slide-media-meta small,
+.projects-archive-grid .project-slide-media-meta small {
+  font-size: 0.44rem;
+}
+
+.project-compact-grid .project-slide-media-meta strong,
+.projects-archive-grid .project-slide-media-meta strong {
+  padding: 0.3rem 0.45rem;
+  font-size: 0.42rem;
+}
+
+.project-compact-grid .project-slide-copy,
+.projects-archive-grid .project-slide-copy {
+  display: flex;
+  min-width: 0;
+  padding: 0.9rem;
+  flex-direction: column;
+}
+
+.project-compact-grid .project-slide-copy > p:first-child,
+.projects-archive-grid .project-slide-copy > p:first-child {
+  overflow: hidden;
+  font-size: 0.48rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-compact-grid .project-slide-copy h3,
+.projects-archive-grid .project-slide-copy h3 {
+  overflow: hidden;
+  margin-top: 0.4rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-compact-grid .project-slide-copy > p:nth-of-type(2),
+.projects-archive-grid .project-slide-copy > p:nth-of-type(2) {
+  display: -webkit-box;
+  min-height: 0;
+  overflow: hidden;
+  margin-top: 0.55rem;
+  color: #928c9f;
+  font-size: 0.62rem;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.project-compact-grid .project-tags,
+.projects-archive-grid .project-tags {
+  gap: 0.25rem;
+  margin-top: 0.62rem;
+}
+
+.project-compact-grid .project-tags span,
+.projects-archive-grid .project-tags span {
+  padding: 0.24rem 0.34rem;
+  font-size: 0.43rem;
+}
+
+.project-compact-grid .project-tags span:nth-child(n + 4),
+.projects-archive-grid .project-tags span:nth-child(n + 4) {
+  display: none;
+}
+
+.project-compact-grid .project-slide-actions,
+.projects-archive-grid .project-slide-actions {
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 0.7rem;
+}
+
+.project-compact-grid .project-slide-actions a,
+.projects-archive-grid .project-slide-actions a {
+  min-height: 1.8rem;
+  padding: 0 0.48rem;
+  font-size: 0.48rem;
+}
+
+.project-compact-grid .project-slide-actions svg,
+.projects-archive-grid .project-slide-actions svg {
+  width: 0.68rem;
+}
+
+.projects-archive-grid .project-add-card {
+  min-height: 21rem;
+  padding: 1.4rem;
+  border-radius: 1rem;
+}
+
+.projects-archive-grid .project-add-card h2 {
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+}
+
+/* Small usability polish for the existing inner-page navigation. */
+.inner-header {
+  position: sticky;
+  top: 0;
+  box-shadow: 0 0.8rem 2.5rem rgba(0, 0, 0, 0.16);
+}
+
+.inner-header::after {
+  position: absolute;
+  right: var(--page-x);
+  bottom: -1px;
+  left: var(--page-x);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(170, 145, 255, 0.45), rgba(96, 216, 239, 0.2), transparent);
+  content: "";
+}
+
+.inner-header-back,
+.inner-header-resume {
+  min-height: 2.45rem;
+  padding: 0 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.025);
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.inner-header-back:hover {
+  border-color: rgba(185, 164, 255, 0.28);
+  background: rgba(155, 123, 255, 0.09);
+  color: white;
+  transform: translateX(-2px);
+}
+
+.inner-header-resume {
+  border-color: rgba(190, 173, 255, 0.22);
+  background: linear-gradient(135deg, rgba(155, 123, 255, 0.15), rgba(99, 216, 236, 0.04));
+  color: #d7ccff;
+}
+
+.inner-header-resume:hover {
+  border-color: rgba(202, 187, 255, 0.48);
+  background: rgba(238, 233, 255, 0.95);
+  color: #171222;
+  transform: translateY(-2px);
+}
+
+@media (min-width: 1350px) {
+  .project-compact-grid,
+  .projects-archive-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1120px) {
+  .project-compact-grid,
+  .projects-archive-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 800px) {
+  .project-compact-grid,
+  .projects-archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  .project-compact-grid,
+  .projects-archive-grid { grid-template-columns: 1fr; }
+
+  .project-compact-grid .project-slide-card,
+  .projects-archive-grid .project-slide-card {
+    min-height: 20rem;
+    grid-template-rows: 8.75rem 1fr;
+  }
+}

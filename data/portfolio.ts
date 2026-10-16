@@ -27,7 +27,7 @@ export const portfolio = {
   },
   stats: [
     { value: "03+", label: "Years building" },
-    { value: "16", label: "Public repositories" },
+    { value: "10", label: "Original projects" },
     { value: "04", label: "Core disciplines" },
   ],
   skills: [
@@ -93,7 +93,7 @@ export const portfolio = {
       accent: "violet",
       image: "",
       github: "https://github.com/uzairali12/tekbooks1",
-      live: "",
+      live: "https://tekbooks1.vercel.app",
     },
     {
       number: "02",
@@ -137,7 +137,7 @@ export const portfolio = {
       accent: "amber",
       image: "",
       github: "https://github.com/uzairali12/resume-fraud-detector",
-      live: "",
+      live: "https://resume-fraud-detector-inky.vercel.app",
     },
     {
       number: "04",
@@ -204,6 +204,94 @@ export const portfolio = {
       image: "",
       github: "https://github.com/uzairali12/Hospital-Mangement-System",
       live: "",
+    },
+    {
+      number: "07",
+      slug: "mini-excel",
+      title: "MiniExcel",
+      kind: "Java Swing spreadsheet application",
+      year: "2025",
+      description:
+        "A lightweight desktop spreadsheet with formulas, row and column editing, undo and redo, clipboard tools, and CSV file support.",
+      overview:
+        "A practical spreadsheet engine that turns core data-structure concepts into a familiar desktop workflow built entirely with Java Swing.",
+      challenge:
+        "Support editable cells, formula evaluation, structural changes, history, and file handling without relying on a spreadsheet framework.",
+      solution:
+        "A JTable interface backed by dynamic lists, stack-based undo and redo, regular-expression parsing, and a shunting-yard evaluator for formulas and functions.",
+      outcome:
+        "A working single-file Java application with common spreadsheet operations, 14 formula functions, and portable CSV save and load support.",
+      tags: ["Java", "Swing", "DSA", "CSV"],
+      accent: "lime",
+      image: "",
+      github: "https://github.com/uzairali12/MiniExcel",
+      live: "",
+    },
+    {
+      number: "08",
+      slug: "regex-to-dfa-converter",
+      title: "Regex to DFA",
+      kind: "Automata theory engine",
+      year: "2026",
+      description:
+        "A Java tool that converts regular expressions into NFAs and DFAs, then validates strings against the generated deterministic machine.",
+      overview:
+        "A console-based compiler theory project that makes the full regex-to-automaton pipeline visible, testable, and easy to reason about.",
+      challenge:
+        "Translate human-readable infix expressions into correct deterministic state machines while preserving operator precedence and epsilon transitions.",
+      solution:
+        "A modular Java pipeline using postfix conversion, Thompson's construction, epsilon closures, subset construction, and DFA-based string simulation.",
+      outcome:
+        "A documented validator supporting concatenation, union, Kleene star, grouping, transition tables, and accepted or rejected string results.",
+      tags: ["Java", "Automata", "Algorithms", "Compiler theory"],
+      accent: "amber",
+      image: "",
+      github: "https://github.com/uzairali12/Regex-to-DFA-Converter-String-Validator",
+      live: "",
+    },
+    {
+      number: "09",
+      slug: "tic-tac-toe-x86",
+      title: "Tic-Tac-Toe x86",
+      kind: "Low-level console game",
+      year: "2026",
+      description:
+        "A two-player Tic-Tac-Toe game written in x86 Assembly with manual state control, input validation, and complete win detection.",
+      overview:
+        "A classic game rebuilt close to the hardware to explore registers, byte arrays, branching, memory management, and terminal input and output.",
+      challenge:
+        "Implement a friendly, reliable game loop without high-level data structures, built-in validation, or conventional UI abstractions.",
+      solution:
+        "A MASM and Irvine32 program with modular procedures for rendering, turn changes, board validation, all eight win patterns, restarts, and exits.",
+      outcome:
+        "A compact x86 application that handles complete matches, invalid moves, ties, and in-session resets with a minimal memory footprint.",
+      tags: ["x86 Assembly", "MASM", "Irvine32", "Game logic"],
+      accent: "rose",
+      image: "",
+      github: "https://github.com/uzairali12/Tic-Tac-Toe-x86-Assembly-Edition",
+      live: "",
+    },
+    {
+      number: "10",
+      slug: "laurent-restaurant",
+      title: "Laurent Restaurant",
+      kind: "Responsive hospitality website",
+      year: "2025",
+      description:
+        "A multi-page Italian restaurant experience covering menus, culinary storytelling, the team, reservations, and contact information.",
+      overview:
+        "An editorial hospitality website designed to make Laurent's food, atmosphere, and practical booking information feel inviting on every screen.",
+      challenge:
+        "Organize a large menu and several content-rich pages while keeping the experience elegant, readable, and usable on mobile devices.",
+      solution:
+        "Semantic HTML and custom CSS with responsive grids, multi-page navigation, menu categories, image-led sections, testimonials, and contact flows.",
+      outcome:
+        "A live, responsive restaurant website spanning home, menu, about, and contact experiences without a frontend framework.",
+      tags: ["HTML", "CSS", "Responsive design", "Multi-page"],
+      accent: "violet",
+      image: "",
+      github: "https://github.com/uzairali12/Laurent-Restaurant-Website",
+      live: "https://uzairali12.github.io/Laurent-Restaurant-Website/",
     },
   ],
   education: [
